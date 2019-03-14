@@ -50,7 +50,7 @@ By creating these embodied interactions through clothing, we are limiting our us
 
 **Week 5-7:** At this point team members will split up work to : (1) the tweaking of the application to have more robust interactions and play a song on the air instrument; (2) working on creating the other instruments and increasing their reliability; and (3) adding functionality to be user-end trainable for boundaries. 
 
-**Week 8-9:** We reserve the last weeks to fine tune the system and allowing for extra time in case something ends up taking longer than we think.
+**Week 8:** We reserve the last weeks to fine tune the system and allowing for extra time in case something ends up taking longer than we think.
 
 ## Stretch Goals
 Some of our stretch goals include providing a modular system for left-handed and right-handed people and implementing a time-dependent audience response element. The modular system will allow left-handed and right-handed people to play the instruments how they are most comfortable playing and the audience element would be a positive or negative response to how well the band is playing together. 
