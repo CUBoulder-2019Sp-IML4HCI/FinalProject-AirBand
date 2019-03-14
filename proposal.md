@@ -13,9 +13,11 @@ Since we want to provide an authentic band experience for everyone, we aim to in
 Three friends are waiting for class to start in the ATLAS lobby. They decide to pass the time by performing an air concert for themselves and their fellow students. 
 
 ![band members](/images/bandmembers.png "Band Members")
+
 From left to right: Joe is an avid guitar player and volunteers to play the guitar; Katie doesn't know how to play any instruments but that's okay, her friend Joe suggests she play the keyboard; Travis is a big music fan and a beginner drummer, so he decides he will play the drums; And together, the three friends will play a show in the ATLAS lobby to entertain themselves and the other students.
 
 ![wearables](/images/wearables.png "Band Wearables")
+
 Joe and Katie will use gloves embedded with micro:bits and flew sensors to track their movements. Travis will wear a cool vest with RGB cameras installed in it to track his movements while he wears colorful gloves.
 
 ## Technologies
