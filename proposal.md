@@ -53,4 +53,4 @@ By creating these embodied interactions through clothing, we are limiting our us
 **Week 15:** We reserve the last week to fine tune the system and allowing for extra time in case something ends up taking longer than we think.
 
 ## Stretch Goals
-Some of our stretch goals include providing a modular system for left-handed and right-handed people and implementing a time-dependent audience response element. The modular system will allow left-handed and right-handed people to play the instruments how they are most comfortable playing and the audience element would be a positive or negative response to how well the band is playing together. 
+Some of our stretch goals include providing a modular system for left-handed and right-handed people and implementing a time-dependent audience response element. The modular system will allow left-handed and right-handed people to play the instruments how they are most comfortable playing and the audience element would be a positive or negative response to how well the band is playing together. We may also add more fidelity into the motion of the air guitarist’s fingers.
