@@ -42,15 +42,15 @@ By creating these embodied interactions through clothing, we are limiting our us
 
 
 ## Timeline
-**Week 1:** Exploration of technology for wearables. For the first week we will be looking on the internet for different techniques to gather gesture, motion, and other sensory input within a wearable. Specifically, we will be focusing on techniques that allow the technology to feel fully integrated or hidden from the user. This exploration will also inform the list of materials we will need.
+**Week 8:** Exploration of technology for wearables. For the first week we will be looking on the internet for different techniques to gather gesture, motion, and other sensory input within a wearable. Specifically, we will be focusing on techniques that allow the technology to feel fully integrated or hidden from the user. This exploration will also inform the list of materials we will need.
 
-**Week 2-3:** We will start rapidly prototyping different sensors on some garments. Our goals will be to (1) start gathering information from the garment to send to the computer; (2) prototype different ways of integrating the sensors into the rock n roll outfits; and (3) analyze the data being received and start looking for trends that will be useful in future engineering.
+**Week 9-10:** We will start rapidly prototyping different sensors on some garments. Our goals will be to (1) start gathering information from the garment to send to the computer; (2) prototype different ways of integrating the sensors into the rock n roll outfits; and (3) analyze the data being received and start looking for trends that will be useful in future engineering.
 
-**Week 4:** Choosing the instrument that seems to have the most reliable input data, we will start feature engineering to get our classes and regressions working reliably. At this point we will also discuss the interactive system that will accompany the project and play the instrument. A goal will just be it to play a couple different sounds based on the output.
+**Week 11-12:** Choosing the instrument that seems to have the most reliable input data, we will start feature engineering to get our classes and regressions working reliably. At this point we will also discuss the interactive system that will accompany the project and play the instrument. A goal will just be it to play a couple different sounds based on the output.
 
-**Week 5-7:** At this point team members will split up work to : (1) the tweaking of the application to have more robust interactions and play a song on the air instrument; (2) working on creating the other instruments and increasing their reliability; and (3) adding functionality to be user-end trainable for boundaries. 
+**Week 13-14:** At this point team members will split up work to : (1) the tweaking of the application to have more robust interactions and play a song on the air instrument; (2) working on creating the other instruments and increasing their reliability; and (3) adding functionality to be user-end trainable for boundaries. 
 
-**Week 8:** We reserve the last weeks to fine tune the system and allowing for extra time in case something ends up taking longer than we think.
+**Week 15:** We reserve the last week to fine tune the system and allowing for extra time in case something ends up taking longer than we think.
 
 ## Stretch Goals
 Some of our stretch goals include providing a modular system for left-handed and right-handed people and implementing a time-dependent audience response element. The modular system will allow left-handed and right-handed people to play the instruments how they are most comfortable playing and the audience element would be a positive or negative response to how well the band is playing together. 
