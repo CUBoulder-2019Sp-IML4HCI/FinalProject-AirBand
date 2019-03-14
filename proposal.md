@@ -9,6 +9,12 @@ Our goal is to give people an embodied and interactive way to perform in an air 
 ## Challenges
 Since we want to provide an authentic band experience for everyone, we aim to integrate all of the sensors into clothing, which will allow the users to embrace rock n roll fashion while tracking their motion. This will also allow the project to take place anywhere, since not static equipment is required. However, this also introduces several challenges, since we will need to make the clothing adaptable to and comfortable for different body types. With regards to keeping people comfortable while they are performing, we will need to make the sensors as non-intrusive as we can with careful placement and fabrication. Along with this, we will also need to control all of the technical components wirelessly, so the users are not getting tangled up while they are playing. This will pose challenges specifically with wireless communication across various digital and analog elements, which actually coincides with the risks of failure discussed below.
 
+## Scenarios
+
+![band members](/images/bandmembers.png "Band Members")
+
+![wearables](/images/wearables.png "Band Wearables")
+
 
 ## Technologies
 The only technology we need to encompass all of the instruments is a set of speakers, which will most likely come from a computer and be controlled via a web application. To make the sound louder, a user can connect bluetooth speakers to their computer and the web application. Due to the large quantity of data that we will receive from each instrument, we also plan to provide a computer per instrument. Most of the technologies we need, though, depend solely on the instruments we are trying to simulate and are unique to each one.
