@@ -1,6 +1,8 @@
 # Change Log
 
 ## Gabe Chapel
+#### Week 10
+I experimented with the Microbit's radio signal strength measurement to see if this is a reasonable option for measuring distance between hands. I adjusted the transmit power to 2 (out of 7) to provide a more variable response and connected it to Wekinator through Processing. I used a linear regression model to train the data, and found that the signal strength is very noisy and very touchy. It depends heavily on the orientation of both Microbits and only changes reliably within about a foot. We could implement a filter to amplify the deviation in the high end of the results, or we could just try to use a Kinect.
 
 ## Jack DeMay
 
@@ -11,3 +13,10 @@ Microbit for keyboard work. I started trying to use the acceleration from the mi
 I got shake to work a little bit, messing with the delay to get it so there is time for a second shake but that the number will flip to 1 long enough to send a message.
 
 ## Bridget Murphy
+
+## Team
+#### Week 9
+We tested the Microbit magnetometer to determine whether it is a feasible option for measuring distance between hands and found that it is not strong enough to measure the distance we need.
+
+#### Week 10
+We decided that we should start testing with a Kinect to detect larger, less abrupt motions that cannot be picked up by the Microbits, such as hand position for each instrument. We still plan to use embedded sensors, though for finger motion, kicks, and hand rotation.
