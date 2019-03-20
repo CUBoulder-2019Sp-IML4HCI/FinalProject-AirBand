@@ -16,7 +16,7 @@ I got shake to work a little bit, messing with the delay to get it so there is t
 
 ## Team
 #### Week 9
-We tested the Microbit magnetometer to determine whether it is a feasible option for measuring distance between hands and found that it is not strong enough to measure the distance we need.
+We tested the Microbit magnetometer to determine whether it is a feasible option for measuring distance between hands and found that it is not strong enough to measure the distance we need. We also took a trip to Goodwill to pick up some rock-n-roll atire, including gloves and a denim jacket, which we will cut into a vest to fit various body types.
 
 #### Week 10
 We decided that we should start testing with a Kinect to detect larger, less abrupt motions that cannot be picked up by the Microbits, such as hand position for each instrument. We still plan to use embedded sensors, though for finger motion, kicks, and hand rotation.
