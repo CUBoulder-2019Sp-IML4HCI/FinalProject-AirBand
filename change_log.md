@@ -14,6 +14,7 @@ Microbit for keyboard work. I started trying to use the acceleration from the mi
 
 I got shake to work a little bit, messing with the delay to get it so there is time for a second shake but that the number will flip to 1 long enough to send a message.
 
+#### Week 10
 The on shake event made me think that the drum kick could use one of those events to flip a switch. I used the on 3g event and it seemed to work very well. (Included in the video)
 
 ## Bridget Murphy
