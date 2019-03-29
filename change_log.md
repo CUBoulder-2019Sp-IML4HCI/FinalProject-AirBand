@@ -17,6 +17,9 @@ I got shake to work a little bit, messing with the delay to get it so there is t
 #### Week 10
 The on shake event made me think that the drum kick could use one of those events to flip a switch. I used the on 3g event and it seemed to work very well. (Included in the video)
 
+#### Week 11
+Working on the web application. Got a simple MVC set up using javascript and Annie's OSC to SocketIO code from github and a tutorial on MVC in javascript. Tested with a simple XY plane classification. Currently plays a sound when class is 1. Functionality tested: wekinator communicating with the application. The communication between model, view, and controller in /drum. TODO: communication to wekinator from the app for training purposes.
+
 ## Bridget Murphy
 #### Week 10
 Last week I created some storyboards and scenarios to go along with our final proposal we turned in last week. I think it paints a good picture of what we want the experience to be like.  This week I messed around with Annie's signal strength library for the microbit. After talking with another group, we figured out we should change the signal strength, which defaults to a pretty high setting. I also emailed Annie and got an example for the library, which should help us moving forward. Next I would like to come up with a design to incorporate the microbits and gloves we purchased this weekend.
