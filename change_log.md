@@ -18,7 +18,10 @@ I got shake to work a little bit, messing with the delay to get it so there is t
 The on shake event made me think that the drum kick could use one of those events to flip a switch. I used the on 3g event and it seemed to work very well. (Included in the video)
 
 #### Week 11
-Working on the web application. Got a simple MVC set up using javascript and Annie's OSC to SocketIO code from github and a tutorial on MVC in javascript. Tested with a simple XY plane classification. Currently plays a sound when class is 1. Functionality tested: wekinator communicating with the application. The communication between model, view, and controller in /drum. TODO: communication to wekinator from the app for training purposes.
+Working on the web application. Got a simple MVC set up using javascript and Ben's OSC to SocketIO code from github and a tutorial on MVC in javascript. Tested with a simple XY plane classification. Currently plays a sound when class is 1. Functionality tested: wekinator communicating with the application. The communication between model, view, and controller in /drum. TODO: communication to wekinator from the app for training purposes.
+
+#### Week 12
+Connected the application to the kick drum wekinator project. Worked on debriefing teammates with the application and how it works. Goals for the weekend: look into getting the application to communicate with wekinator for training data.
 
 ## Bridget Murphy
 #### Week 10
