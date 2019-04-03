@@ -10,15 +10,21 @@ var DrumModel = function () {
     updateCurrent: function (msg) {
         var osc_address = msg["address"];
         var osc_values = msg["payload"];
-        if (this.drumClasses.length === 10) {
+        if (this.drumClasses.length === 7) {
             this.drumClasses = this.drumClasses.slice(1);
         }
         this.drumClasses.push(osc_values[0]);
-        var mostFreq = this.mostFreqClass();
-        if (this.drumClass != mostFreq) {
-            this.drumClass = mostFreq;
-            this.updateCurrentEvent.notify({drumClass: this.drumClass});
+        // var mostFreq = this.mostFreqClass();
+        // if (this.drumClass != mostFreq) {
+        //     this.drumClass = mostFreq;
+        //     this.updateCurrentEvent.notify({drumClass: this.drumClass});
+        // }
+        var newCls = osc_values[0];
+        if (this.drumClass != newCls) {
+           this.drumClass = newCls;
+            this.updateCurrentEvent.notify({drumClass: this.drumClass}); 
         }
+        
     },
 
     mostFreqClass: function() {

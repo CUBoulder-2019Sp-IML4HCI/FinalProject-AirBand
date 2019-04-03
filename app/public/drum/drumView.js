@@ -57,7 +57,7 @@ DrumView.prototype = {
         // stuff to update the view
         // console.log(this.$currentEvent)
         this.$currentEvent.innerHTML = drumClass
-        if (drumClass === 1) {
+        if (drumClass === 2) {
             this.synth.triggerAttackRelease("C2", "8n");
         }
     },
