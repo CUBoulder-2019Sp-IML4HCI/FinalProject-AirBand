@@ -42,3 +42,7 @@ We tested the Microbit magnetometer to determine whether it is a feasible option
 #### Week 10
 We decided that we should start testing with a Kinect to detect larger, less abrupt motions that cannot be picked up by the Microbits, such as hand position for each instrument. We still plan to use embedded sensors, though for finger motion, kicks, and hand rotation.
 #### YouTube: https://youtu.be/9BtmYQ0wrJI
+
+#### Week 11
+
+#### Youtube: https://youtu.be/31yHij-xtwE
