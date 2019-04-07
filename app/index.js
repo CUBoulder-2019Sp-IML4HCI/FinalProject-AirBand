@@ -1,7 +1,11 @@
 var OSC_RECIEVE_PORT = 12000
+var OSC_SEND_PORT = 6448
 var WS_PORT=4243
+var SERIAL_PORT = "/dev/cu.usbmodem1422"
 
 var osc = require('node-osc');
+var SerialPort = require("serialport");
+var Readline = require('@serialport/parser-readline')
 
 var express = require('express');
 var app = express();
@@ -41,3 +45,15 @@ oscServer.on("message", function (msg, rinfo) {
             socket.emit("osc", {'address':msg[0], 'payload':msg.slice(1)});
       })
 });
+
+
+var oscClient = new osc.Client('127.0.0.1', OSC_SEND_PORT);
+console.log('sending OSC packets on *:'+OSC_SEND_PORT);
+// oscClient.send('/wekinator/control/startRecording', '1');
+
+var port = new SerialPort(SERIAL_PORT);
+
+var parser = port.pipe(new Readline({ delimiter: '\n' }));
+parser.on('data', console.log);
+
+console.log('listening for serial packets on *:'+SERIAL_PORT);
