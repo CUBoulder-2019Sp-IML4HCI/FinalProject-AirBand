@@ -51,8 +51,10 @@ var oscClient = new osc.Client('127.0.0.1', OSC_SEND_PORT);
 console.log('sending OSC packets on *:'+OSC_SEND_PORT);
 // oscClient.send('/wekinator/control/startRecording', '1');
 
-var port = new SerialPort(SERIAL_PORT);
-
+var port = new SerialPort(SERIAL_PORT, {
+  baudRate: 115200,
+});
+port.write('turn on\n');
 var parser = port.pipe(new Readline({ delimiter: '\n' }));
 parser.on('data', console.log);
 
