@@ -4,6 +4,14 @@
 #### Week 10
 I experimented with the Microbit's radio signal strength measurement to see if this is a reasonable option for measuring distance between hands. I adjusted the transmit power to 2 (out of 7) to provide a more variable response and connected it to Wekinator through Processing. I used a linear regression model to train the data, and found that the signal strength is very noisy and very touchy. It depends heavily on the orientation of both Microbits and only changes reliably within about a foot. We could implement a filter to amplify the deviation in the high end of the results, or we could just try to use a Kinect.
 
+#### Week 11
+I began constructing the flex sensor glove to be used with the air guitar and keyboard. I organized the circuitry to be as unintrusive as possible and tested a single flex sensor. When soldering the first sensor, I made one mistake, so I should be able to make the protoboard about half the size it currently is.
+
+#### Week 12
+I finalized the prototype for the flex sensor glove, which has four flex sensors connected to a Microbit. Everything is currently taped to a glove, but we will need to implement a more secure fastening method to ensure that the sensors do not shift. We will also need to get gloves that form to the user's hand better, which may mean we need to design a more modular way to attach the sensors.
+
+Connecting the Microbit to Wekinator yielded pretty reliable results, which I then transferred to the web app. We are using classification to determine whether the user's four fingers are up or down, so we can then attempt to play distinct notes.
+
 ## Jack DeMay
 #### Week 10
 I took another group's suggestion of using a 3 Microbit set up with 2 Microbits acting as transmitters and the third Microbit acting as a receiver connected to the computer via USB. While this is a viable configuration, using the radio signal strength to determine distance between the 2 transmitters is simply too noisy and we will most likely end up having to use a Kinect. I also started to modify the jean jacket we purchased on Saturday and am figuring out the best parts of it to incorporate sensors. This will likely be used for the air drummer and could potentially use a camera or an ultrasonic sensor attached to the chest to keep track of the drummer's arm position and movement.
@@ -34,3 +42,7 @@ We tested the Microbit magnetometer to determine whether it is a feasible option
 #### Week 10
 We decided that we should start testing with a Kinect to detect larger, less abrupt motions that cannot be picked up by the Microbits, such as hand position for each instrument. We still plan to use embedded sensors, though for finger motion, kicks, and hand rotation.
 #### YouTube: https://youtu.be/9BtmYQ0wrJI
+
+#### Week 11
+
+#### Youtube: https://youtu.be/31yHij-xtwE
