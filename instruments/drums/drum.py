@@ -14,15 +14,11 @@ client = udp_client.SimpleUDPClient("localhost", 6448)
 
 while(True):
     line = ser.readline().decode('utf8').strip()
-    
-    try:
+    print(line)
 
-      direction = float(line)
-      
-      print(f"({direction})")
-      
-      client.send_message("/air_band/drum", [direction] )
-    except:
-      # print(line)
-      # print('here')
-      pass
+    direction = float(line)
+    
+    print(f"({direction})")
+    
+    client.send_message("/air_band/drum", [direction] )
+
