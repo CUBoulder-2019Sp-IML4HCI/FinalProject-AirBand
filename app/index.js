@@ -30,6 +30,10 @@ io.on('connection', function(socket){
               return item != socket;
         });
   });
+
+  socket.on('training', function(msg) {
+    console.log(msg);
+  })
 });
 
 http.listen(WS_PORT, function(){
@@ -46,16 +50,15 @@ oscServer.on("message", function (msg, rinfo) {
       })
 });
 
+// this.oscClient = new osc.Client('127.0.0.1', OSC_SEND_PORT);
+//         console.log('sending OSC packets on *:'+OSC_SEND_PORT);
+//         // oscClient.send('/wekinator/control/startRecording', '1');
 
-var oscClient = new osc.Client('127.0.0.1', OSC_SEND_PORT);
-console.log('sending OSC packets on *:'+OSC_SEND_PORT);
-// oscClient.send('/wekinator/control/startRecording', '1');
+//         this.serialPort = new SerialPort(SERIAL_PORT, {
+//           baudRate: 115200,
+//         });
+//         this.serialPort.write('turn on\n');
+//         this.parser = port.pipe(new Readline({ delimiter: '\n' }));
+//         parser.on('data', console.log);
 
-var port = new SerialPort(SERIAL_PORT, {
-  baudRate: 115200,
-});
-port.write('turn on\n');
-var parser = port.pipe(new Readline({ delimiter: '\n' }));
-parser.on('data', console.log);
-
-console.log('listening for serial packets on *:'+SERIAL_PORT);
+//         console.log('listening for serial packets on *:'+SERIAL_PORT);

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Drum</title>
+    <title>Training</title>
     <link href="../libraries/foundation/css/foundation.min.css" rel="stylesheet"></link>
     <link href="http://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css" rel="stylesheet">
 
@@ -17,34 +17,20 @@
     </style>
   </head>
   <body class="body-container">
-    <h1>Test Drum App</h1>
-    <div><span>Current Drum Class:&nbsp;&nbsp;</span><span id="currentEvent">None</span></div>
+    <h1>Test Training App</h1>
+    <div><span>Current Training Class:&nbsp;&nbsp;</span><span id="currentEvent">None</span></div>
   </body>
-  <script src="drumModel.js" type="text/javascript"></script>
-  <script src="drumView.js" type="text/javascript"></script>
-  <script src="drumController.js" type="text/javascript"></script>
+  <script src="trainingModel.js" type="text/javascript"></script>
+  <script src="trainingView.js" type="text/javascript"></script>
+  <script src="trainingController.js" type="text/javascript"></script>
   <script>
     var touched = false;
     function mousePressed() { if (!touched) {
      getAudioContext().resume(); touched = true} 
     }
-    var model = new DrumModel(),
-        view = new DrumView(model),
-        controller = new DrumController(model, view);
-
-    // Web socket controller that calls the DrumController events
-    var socket = io();
-
-    // Do something with it
-    socket.on('osc', function(msg){
-      
-      // Do stuff
-      console.log("messaged received");
-      controller.updateCurrent(msg);
-
-    });
-
-    socket.emit('training', {address: "/hello", payload: [12,3,2,1]})
+    var model = new TrainingModel(),
+        view = new TrainingView(model),
+        controller = new TrainingController(model, view);
   </script>
   <script>
     $(document).foundation();
