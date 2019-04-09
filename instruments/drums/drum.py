@@ -7,7 +7,7 @@ import math
 from pythonosc import udp_client 
 
 # change this string depending upon where your computer makes a device for the micro:bit
-serialport = "/dev/cu.usbmodem1422"
+serialport = "/dev/cu.usbmodem1412"
 
 ser = serial.Serial(serialport, 115200)
 client = udp_client.SimpleUDPClient("localhost", 6448)
