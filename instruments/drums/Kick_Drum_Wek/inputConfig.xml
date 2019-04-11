@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-<OSCInputGroup>
-  <oscMessage>/air_band/drum</oscMessage>
-  <numInputs>1</numInputs>
-  <groupName>Inputs</groupName>
-  <inputNames>
-    <string>drum-1</string>
-  </inputNames>
-</OSCInputGroup>
