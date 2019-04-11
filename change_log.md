@@ -16,6 +16,14 @@ Connecting the Microbit to Wekinator yielded pretty reliable results, which I th
 #### Week 10
 I took another group's suggestion of using a 3 Microbit set up with 2 Microbits acting as transmitters and the third Microbit acting as a receiver connected to the computer via USB. While this is a viable configuration, using the radio signal strength to determine distance between the 2 transmitters is simply too noisy and we will most likely end up having to use a Kinect. I also started to modify the jean jacket we purchased on Saturday and am figuring out the best parts of it to incorporate sensors. This will likely be used for the air drummer and could potentially use a camera or an ultrasonic sensor attached to the chest to keep track of the drummer's arm position and movement.
 
+#### Week 11
+
+Once we obtained the Microsoft Kinect we ordered, I began attempting to connect to it and operate it through Mac OSX. Although we were advised to use this feature extractor on Windows, every member of our group has a Mac and also another team in our class already had success with Kinect + OSX leading me to believe it is feasible. After a lot of trial and error and the installation of various drivers and MacPorts, I was successful in getting live video from the Kinect on my desktop. This was done with a command 'freenect-glview' in the terminal once I had cloned and installed the repo from an open-sourced Kinect project called 'Open Kinect'. The Kinect can do IR video as well as depth view. I now need to figure out how to generate/read OSC messages from the Kinect video stream and also how to get it to recognize human figures so we can start integrating it into the Air Band. 
+
+#### Week 12
+
+After updating my computer I am no longer able to get a live video stream from the Kinect. I had OSC messages briefly figured out prior to this happening but I need to get this fixed ASAP if we are to move forward with the Kinect.
+
 ## Mikhaila Friske
 #### Week 9
 Microbit for keyboard work. I started trying to use the acceleration from the micro:bit to try and get the point where the it would know when you are moving down. However, because it is acceleration and not velocity it was not working as well as I hoped (or really at all). I started to play around with the events of the micro:bit (like on shake) and messing around with putting a delay so it would "flip a switch" when it is shook to trigger a class in wekinator.
