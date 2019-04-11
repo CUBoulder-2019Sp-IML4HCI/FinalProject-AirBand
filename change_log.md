@@ -31,6 +31,11 @@ Working on the web application. Got a simple MVC set up using javascript and Ben
 #### Week 12
 Connected the application to the kick drum wekinator project. Worked on debriefing teammates with the application and how it works. Goals for the weekend: look into getting the application to communicate with wekinator for training data.
 
+#### Week 13
+Got the application talking with wekinator and also got serial port to read into the node server. Worked on having a micro:bit being read and sent to wekinator from app and then having app update based on output data. You may now play the A and B buttons as well as the 3G event on a micro:bit that is plugged in.
+
+Next steps: Look into setting up the way the user will train the models and working on making one instrument viable for showcase. 
+
 ## Bridget Murphy
 #### Week 10
 Last week I created some storyboards and scenarios to go along with our final proposal we turned in last week. I think it paints a good picture of what we want the experience to be like.  This week I messed around with Annie's signal strength library for the microbit. After talking with another group, we figured out we should change the signal strength, which defaults to a pretty high setting. I also emailed Annie and got an example for the library, which should help us moving forward. Next I would like to come up with a design to incorporate the microbits and gloves we purchased this weekend.
