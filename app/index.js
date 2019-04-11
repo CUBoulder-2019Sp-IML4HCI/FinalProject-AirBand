@@ -1,7 +1,9 @@
+var OSC_DATA_PORT = 8999
 var OSC_RECIEVE_PORT = 12000
 var OSC_SEND_PORT = 6448
 var WS_PORT=4243
 var SERIAL_PORT = "/dev/cu.usbmodem1422"
+var INSTRUMENT = "drum" 
 
 var osc = require('node-osc');
 var SerialPort = require("serialport");
@@ -11,6 +13,10 @@ var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+
+var instruments = require('./models.js');
+
+var model = new instruments.Drum();
 
 var open_sockets = [];
 
@@ -33,6 +39,14 @@ io.on('connection', function(socket){
 
   socket.on('training', function(msg) {
     console.log(msg);
+  });
+
+  socket.on('delete', function(msg) {
+    console.log(msg);
+  });
+
+  socket.on('run', function(msg) {
+    console.log(msg);
   })
 });
 
@@ -50,15 +64,33 @@ oscServer.on("message", function (msg, rinfo) {
       })
 });
 
-// this.oscClient = new osc.Client('127.0.0.1', OSC_SEND_PORT);
-//         console.log('sending OSC packets on *:'+OSC_SEND_PORT);
-//         // oscClient.send('/wekinator/control/startRecording', '1');
+var oscClient = new osc.Client('127.0.0.1', OSC_SEND_PORT);
+console.log('sending OSC packets on *:'+OSC_SEND_PORT);
+// oscClient.send('/wekinator/control/startRecording', '1');
 
-//         this.serialPort = new SerialPort(SERIAL_PORT, {
-//           baudRate: 115200,
-//         });
-//         this.serialPort.write('turn on\n');
-//         this.parser = port.pipe(new Readline({ delimiter: '\n' }));
-//         parser.on('data', console.log);
+var serialPort = new SerialPort(SERIAL_PORT, {
+  baudRate: 115200,
+});
 
-//         console.log('listening for serial packets on *:'+SERIAL_PORT);
+var parser = serialPort.pipe(new Readline({ delimiter: '\n' }));
+parser.on('data', function(line) {
+  // console.log(line);
+  if (line.slice(0,2) == "#k") { // kick drum
+    setTimeout(() => model.updateKick(line.slice(2)), 0);
+    setTimeout(sendData, 0);
+  } else if (line.slice(0,2) == "#l") { // left drum hit
+    setTimeout(() => model.updateLeftHand(line.slice(2)), 0);
+    setTimeout(sendData, 0);
+  } else if (line.slice(0,2) == "#r") { // right drum hit
+    setTimeout(() => model.updateRightHand(line.slice(2)), 0);
+    setTimeout(sendData, 0);
+  }
+});
+
+console.log('listening for serial packets on *:'+SERIAL_PORT);
+
+var sendData = function() {
+  // console.log("sending data", model.getInput());
+  oscClient.send('/air_band/drum/inputs', model.getInput());
+}
+

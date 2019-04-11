@@ -1,7 +1,9 @@
 var DrumView = function (model) {
     this.model = model;
     this.synth = new Tone.MembraneSynth().toMaster();
-    this.updateCurrentEvent = new Event(this);
+    this.updateModelEvent = new Event(this);
+
+    this.wekinatorMessage = new Event(this);
 
     this.init();
 };
@@ -18,6 +20,11 @@ DrumView.prototype = {
         // cache the document object
         this.$container = $('.body-container');
         this.$currentEvent = this.$container.find('#currentEvent')[0];
+        this.$startRecButton = this.$container.find('.js-startRec');
+        this.$stopRecButton = this.$container.find('.js-stopRec');
+        this.$clearExamplesButton = this.$container.find('.js-clear');
+        this.$startRunningButton = this.$container.find('.js-run');
+        this.$trainButton = this.$container.find('.js-train');
 
         return this;
     },
@@ -25,40 +32,85 @@ DrumView.prototype = {
     setupHandlers: function () {
 
         // If the event is handled by a button or an element event on the page
-        // this.addTaskButtonHandler = this.addTaskButton.bind(this);
+        this.startRecButtonHandler = this.startRecButton.bind(this);
+        this.stopRecButtonHandler = this.stopRecButton.bind(this);
+        this.clearExamplesButtonHander = this.clearExamplesButton.bind(this);
+        this.startRunningButtonHandler = this.startRunningButton.bind(this);
+        this.trainButtonHandler = this.trainButton.bind(this);
 
         /**
         Handlers from Event Dispatcher
         */
-        this.updateCurrentHandler = this.updateCurrent.bind(this);
+        this.updateModelHandler = this.updateModel.bind(this);
 
         return this;
     },
 
     enable: function () {
 
-        // this.$addTaskButton.click(this.addTaskButtonHandler);
+        this.$startRecButton.click(this.startRecButtonHandler);
+        this.$stopRecButton.click(this.stopRecButtonHandler);
+        this.$clearExamplesButton.click(this.clearExamplesButtonHander);
+        this.$startRunningButton.click(this.startRunningButtonHandler);
+        this.$trainButton.click(this.trainButtonHandler);
 
         /**
          * Event Dispatcher
          */
-        this.model.updateCurrentEvent.attach(this.updateCurrentHandler);
+        this.model.updateModelEvent.attach(this.updateModelHandler);
 
         return this;
     },
 
-    // addTaskButton: function () {
-    //     this.addTaskEvent.notify({
-    //         task: "Some Event"
-    //     });
-    // },
+    startRecButton: function () {
+        this.wekinatorMessage.notify({
+            task: "training",
+            msg: {address:"/wekinator/control/startRecording", payload: 1}
+        });
+    },
 
-    show: function (drumClass) {
+    stopRecButton: function () {
+        this.wekinatorMessage.notify({
+            task: "training",
+            msg: {address:"/wekinator/control/stopRecording", payload: 1}
+        });
+    },
+
+    trainButton: function () {
+        this.wekinatorMessage.notify({
+            task: "training",
+            msg: {address:"/wekinator/control/train", payload: 1}
+        });
+    },
+
+    clearExamplesButton: function () {
+        this.wekinatorMessage.notify({
+            task: "delete",
+            msg: {address:"/wekinator/control/deleteExamplesForOutput", payload: 1}
+        });
+    },
+
+    startRunningButton: function () {
+        this.wekinatorMessage.notify({
+            task: "run",
+            msg: {address:"/wekinator/control/startRunning", payload: 1}
+        });
+    },
+
+    show: function (outputs) {
         // stuff to update the view
         // console.log(this.$currentEvent)
-        this.$currentEvent.innerHTML = drumClass
-        if (drumClass === 2) {
+        // this.$currentEvent.innerHTML = drumClass
+        if (outputs[6] === 2) {
             this.synth.triggerAttackRelease("C2", "8n");
+        }
+
+        if (outputs[3] === 2) {
+            this.synth.triggerAttackRelease("E1", "8n");
+        }
+
+        if (outputs[0] === 2) {
+            this.synth.triggerAttackRelease("C5", "8n");
         }
     },
 
@@ -66,9 +118,9 @@ DrumView.prototype = {
 
     /* -------------------- Handlers From Event Dispatcher ----------------- */
 
-    updateCurrent: function (sender, args) {
+    updateModel: function (sender, args) {
         console.log(args);
-        this.show(args["drumClass"]);
+        this.show(args["output"]);
     },
 
     /* -------------------- End Handlers From Event Dispatcher ----------------- */

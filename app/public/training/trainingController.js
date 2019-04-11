@@ -33,8 +33,12 @@ TrainingController.prototype = {
         this.model.updateCurrent(args);
     },
 
-    trainingEmit: function () {
-        this.socket.emit("training", {'address':"/hello/there", 'payload':[1,2,3]});
+    startRecording: function () {
+        this.socket.emit("training", {'address':"/wekinator/control/startRecording", 'payload':1});
+    },
+
+    stopRecording: function () {
+        this.socket.emit("training", {'address':"/wekinator/control/stopRecording", 'payload':1});
     }
 
 };
