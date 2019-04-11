@@ -51,3 +51,7 @@ We decided that we should start testing with a Kinect to detect larger, less abr
 #### Week 11
 
 #### Youtube: https://youtu.be/31yHij-xtwE
+
+#### Week 12
+
+#### Youtube: https://www.youtube.com/watch?v=NQNC5pPA1v8
