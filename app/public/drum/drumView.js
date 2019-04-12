@@ -19,6 +19,8 @@ var DrumView = function (model) {
 
     this.wekinatorMessage = new Event(this);
 
+    this.timer = null;
+
     this.init();
 };
 
@@ -28,6 +30,16 @@ DrumView.prototype = {
         this.createChildren()
             .setupHandlers()
             .enable();
+
+        Webcam.set({
+          width: 320,
+          height: 240,
+          image_format: 'jpeg',
+          jpeg_quality: 90,
+          flip_horiz: true
+        });
+
+        Webcam.attach( '#my_camera' );
     },
 
     createChildren: function () {
@@ -75,41 +87,57 @@ DrumView.prototype = {
 
         return this;
     },
+    
+    take_snapshot: function() {
+      // take snapshot and get image data
+      Webcam.snap( function(data_uri, canvas, context) {
+        // display results in page
+        var w = 32;
+        var h = 60;
+        var total = w * h;
+        var data = context.getImageData(0,0,320,240).data;
+        var lowRes = [];
 
-    startRecButton: function () {
-        this.wekinatorMessage.notify({
-            task: "training",
-            msg: {address:"/wekinator/control/startRecording", payload: 1}
+        // times width by 4 because 4 points of data per pixel
+        for (var x = 0; x < (320*4); x += (w*4)) { 
+          for (var y = 0; y < (240); y += (h)) {
+            var red = 0, green = 0, blue = 0;
+        
+            for (var i = 0; i < (w*4); i+=4) {
+              for (var j = 0; j < (h); j+=1) {
+                var index = (x + i) + (y + j) * (320*4);
+                red += data[index];
+                green += data[index+1];
+                blue += data[index+2];
+              }
+            }
+            // RGB = (R*65536)+(G*256)+B
+            var color = (red*65536)+(green*256)+blue;
+            lowRes.push(color);
+          }
+        }
+        console.log(lowRes);
+        view.wekinatorMessage.notify({
+            task: "webcam",
+            msg: {data: lowRes}
         });
+      } );
     },
-
-    stopRecButton: function () {
-        this.wekinatorMessage.notify({
-            task: "training",
-            msg: {address:"/wekinator/control/stopRecording", payload: 1}
-        });
+    
+    start_snapping: function() {
+      if (!this.timer) {
+        this.take_snapshot();
+        this.timer = setInterval(this.take_snapshot, 250 );
+      }
     },
-
-    trainButton: function () {
-        this.wekinatorMessage.notify({
-            task: "training",
-            msg: {address:"/wekinator/control/train", payload: 1}
-        });
+    
+    stop_snapping: function() {
+      if (this.timer) {
+        clearTimeout( this.timer );
+        this.timer = null;
+      }
     },
-
-    clearExamplesButton: function () {
-        this.wekinatorMessage.notify({
-            task: "delete",
-            msg: {address:"/wekinator/control/deleteExamplesForOutput", payload: 1}
-        });
-    },
-
-    startRunningButton: function () {
-        this.wekinatorMessage.notify({
-            task: "run",
-            msg: {address:"/wekinator/control/startRunning", payload: 1}
-        });
-    },
+    
 
     show: function (outputs) {
         // stuff to update the view
@@ -126,6 +154,47 @@ DrumView.prototype = {
         if (outputs[0] === 2) {
             this.tom.triggerAttackRelease("G3");
         }
+    },
+
+    /* events */
+
+    startRecButton: function () {
+        this.start_snapping();
+        this.wekinatorMessage.notify({
+            task: "training",
+            msg: {address:"/wekinator/control/startRecording", payload: 1}
+        });
+    },
+
+    stopRecButton: function () {
+        this.stop_snapping();
+        this.wekinatorMessage.notify({
+            task: "training",
+            msg: {address:"/wekinator/control/stopRecording", payload: 1}
+        });
+    },
+
+    trainButton: function () {
+        this.wekinatorMessage.notify({
+            task: "training",
+            msg: {address:"/wekinator/control/train", payload: 1}
+        });
+    },
+
+    clearExamplesButton: function () {
+        this.stop_snapping();
+        // this.wekinatorMessage.notify({
+        //     task: "delete",
+        //     msg: {address:"/wekinator/control/deleteExamplesForOutput", payload: 1}
+        // });
+    },
+
+    startRunningButton: function () {
+        this.start_snapping();
+        this.wekinatorMessage.notify({
+            task: "run",
+            msg: {address:"/wekinator/control/startRunning", payload: 1}
+        });
     },
 
 

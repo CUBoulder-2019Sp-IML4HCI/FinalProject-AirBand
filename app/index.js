@@ -46,7 +46,7 @@ io.on('connection', function(socket){
 
   // for training event sent by socket
   socket.on('training', function(msg) {
-    console.log(msg);
+    oscClient.send(msg["address"], msg["payload"]);
   });
 
   // for delete event sent by socket
@@ -56,8 +56,15 @@ io.on('connection', function(socket){
 
   // for run message sent by socket
   socket.on('run', function(msg) {
-    console.log(msg);
-  })
+    oscClient.send(msg["address"], msg["payload"]);
+  });
+
+  // for run message sent by socket
+  socket.on('webcam', function(msg) {
+    data = msg["data"]
+    setTimeout(() => model.updateVideoInput(data), 0);
+    setTimeout(sendData, 0);
+  });
 });
 
 
@@ -82,6 +89,7 @@ var oscClient = new osc.Client('127.0.0.1', OSC_SEND_PORT);
 console.log('sending OSC packets on *:'+OSC_SEND_PORT);
 // oscClient.send('/wekinator/control/startRecording', '1');
 
+/*
 // set up serial port to read micro:bit serial lines
 var serialPort = new SerialPort(SERIAL_PORT, {
   baudRate: 115200,
@@ -108,7 +116,7 @@ parser.on('data', function(line) {
 });
 
 console.log('listening for serial packets on *:'+SERIAL_PORT);
-
+*/
 
 // function to send data to wekinator
 var sendData = function() {
