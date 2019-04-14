@@ -47,6 +47,21 @@ io.on('connection', function(socket){
   // for training event sent by socket
   socket.on('training', function(msg) {
     console.log(msg);
+    address = msg["address"];
+    output = null;
+    if (msg["output"] != undefined){
+      outputs = formulateTestOutputs(7);
+      output = msg["output"];
+      outputs[output-1]["value"] = msg["payload"];
+      console.log(outputs);
+    }
+
+    if (address === "/wekinator/control/startRecording" && output != null) {
+      oscClient.send('/wekinator/control/outputs', outputs);
+      oscClient.send('/wekinator/control/enableModelRecording', output);
+    } else if (address === "/wekinator/control/stopRecording" && output != null) {
+      oscClient.send('/wekinator/control/disableModelRecording', output);
+    }
     oscClient.send(msg["address"], msg["payload"]);
   });
 
@@ -123,5 +138,15 @@ console.log('listening for serial packets on *:'+SERIAL_PORT);
 var sendData = function() {
   // console.log("sending data", model.getInput());
   oscClient.send('/air_band/drum/inputs', model.getInput());
+}
+
+var formulateTestOutputs = function(n) {
+  var wekOutputs = []
+
+  for (var i = 0; i < n; i++) {
+    wekOutputs.push({type: "float", value: 1})
+  }
+
+  return wekOutputs
 }
 
