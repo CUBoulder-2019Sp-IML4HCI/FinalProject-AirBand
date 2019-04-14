@@ -46,6 +46,7 @@ io.on('connection', function(socket){
 
   // for training event sent by socket
   socket.on('training', function(msg) {
+    console.log(msg);
     oscClient.send(msg["address"], msg["payload"]);
   });
 
