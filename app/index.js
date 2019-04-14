@@ -5,7 +5,7 @@ var WS_PORT=4243
 
 // Update the serial port based on your computer
 var SERIAL_PORT = "/dev/cu.usbmodem1422"
-var INSTRUMENT = "drum" 
+var INSTRUMENT = "keyboard" 
 
 // require osc and serial port
 var osc = require('node-osc');
@@ -22,7 +22,7 @@ var io = require('socket.io')(http);
 
 // load the instrument classes and create model
 var instruments = require('./models.js');
-var model = new instruments.Drum();
+var model = new instruments.Keyboard();
 
 // initialized the sockets
 var open_sockets = [];
