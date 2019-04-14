@@ -15,14 +15,14 @@ TrainingController.prototype = {
 
     setupHandlers: function () {
         // These would happen if the event is coming from the view
-        // this.updateCurrentHandler = this.updateCurrent.bind(this);
+        this.wekinatorMessageHandler = this.wekinatorMessage.bind(this);
 
         return this;
     },
 
     enable: function () {
         // This is for when event is coming from the view
-        // this.view.updateCurrentEvent.attach(this.updateCurrentHandler);
+        this.view.wekinatorMessage.attach(this.wekinatorMessageHandler);
 
         return this;
     },
@@ -33,12 +33,8 @@ TrainingController.prototype = {
         this.model.updateCurrent(args);
     },
 
-    startRecording: function () {
-        this.socket.emit("training", {'address':"/wekinator/control/startRecording", 'payload':1});
+    wekinatorMessage: function (sender, args) {
+        this.socket.emit(args["task"], args["msg"]);
     },
-
-    stopRecording: function () {
-        this.socket.emit("training", {'address':"/wekinator/control/stopRecording", 'payload':1});
-    }
 
 };

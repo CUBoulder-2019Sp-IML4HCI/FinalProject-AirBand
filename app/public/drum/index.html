@@ -30,11 +30,10 @@
 
 
 
-    <!-- <div class="left">
-    <h1>WebcamJS Test Page</h1>
-    <h3>Demonstrates continuous capture &amp; display</h3>
+    <div class="left">
+    <h2>WebcamJS Test Page</h2>
     
-    <div id="my_camera"></div> -->
+    <div id="my_camera"></div>
     
     <!-- A button for taking snaps -->
     <!-- <form>
@@ -44,61 +43,6 @@
     </form> -->
   </div>
   </body>
-  <!-- Configure a few settings and attach camera -->
-  <!--<script language="JavaScript">
-    Webcam.set({
-      width: 320,
-      height: 240,
-      image_format: 'jpeg',
-      jpeg_quality: 90,
-      flip_horiz: true
-    });
-    Webcam.attach( '#my_camera' );
-  </script>
-  
-  <!-- Code to handle taking the snapshot and displaying it locally 
-  <script language="JavaScript">
-    var timer = null;
-
-    //**dataURL to blob**
-    function dataURLtoBlob(dataurl) {
-      var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-          bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-      while(n--){
-          u8arr[n] = bstr.charCodeAt(n);
-      }
-      return new Blob([u8arr], {type:mime});
-    }
-    
-    function take_snapshot() {
-      // take snapshot and get image data
-      Webcam.snap( function(data_uri) {
-        // display results in page
-        var img = new Image();
-        img.src = data_uri;
-        
-        console.log(dataURLtoBlob(data_uri));
-      } );
-    }
-    
-    function start_snapping() {
-      if (!timer) {
-        take_snapshot();
-        timer = setInterval( take_snapshot, 250 );
-      }
-    }
-    
-    function stop_snapping() {
-      if (timer) {
-        clearTimeout( timer );
-        timer = null;
-      }
-    }
-    
-    function erase_snaps() {
-      document.getElementById('results').innerHTML = '';
-    }
-  </script> -->
   <script src="drumModel.js" type="text/javascript"></script>
   <script src="drumView.js" type="text/javascript"></script>
   <script src="drumController.js" type="text/javascript"></script>

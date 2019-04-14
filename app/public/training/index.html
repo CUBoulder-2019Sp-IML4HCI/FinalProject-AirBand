@@ -11,14 +11,128 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="../libraries/Tone.js"></script>
     <script src="../eventDispatcher.js" type="text/javascript"></script>
+    <script src="../libraries/webcam.min.js"></script>
 
     <style> 
-      body {padding: 0; margin: 0;} 
+      body {padding: 0; margin: 0;}
+      .countdown {
+        float: right;
+        font-size: 5rem;
+      }
+      /* Hide all steps by default: */
+      .tab {
+        display: none;
+      }
+
+      /* Make circles that indicate the steps of the form: */
+      .step {
+        height: 15px;
+        width: 15px;
+        margin: 0 2px;
+        background-color: #bbbbbb;
+        border: none; 
+        border-radius: 50%;
+        display: inline-block;
+        opacity: 0.5;
+      }
+
+      /* Mark the active step: */
+      .step.active {
+        opacity: 1;
+      }
+
+      /* Mark the steps that are finished and valid: */
+      .step.finish {
+        background-color: #4CAF50;
+      } 
+
+      video {
+        border: solid 2px black !important;
+      }
     </style>
   </head>
   <body class="body-container">
-    <h1>Test Training App</h1>
-    <div><span>Current Training Class:&nbsp;&nbsp;</span><span id="currentEvent">None</span></div>
+    <div class="row">
+      <div class="columns small-12">
+        <h1>Training Your Instrument</h1>
+      </div>
+      <div class="columns medium-6">
+        <label>Choose an Instrument
+          <select>
+            <option value="drum">Drum</option>
+            <option value="keyboard">Keyboard</option>
+            <option value="guitar">Guitar</option>
+          </select>
+        </label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="columns medium-6">
+        <span class="countdown"></span>
+        <div id="my_camera"></div>
+      </div>
+      <div class="columns medium-6">
+        <form id="regForm">
+          <!-- Circles which indicates the steps of the form: -->
+          <div style="text-align:center;margin-bottom:40px;">
+            <span class="step"></span>
+            <span class="step"></span>
+            <span class="step"></span>
+            <span class="step"></span>
+            <span class="step"></span>
+            <span class="step"></span>
+            <span class="step"></span>
+            <span class="step"></span>
+          </div>
+
+          <!-- One "tab" for each step in the form: -->
+          <div class="tab">Training Left Hand.
+            <p>Move left hand from top left corner to top right corner. Make sure your hand is in the picture!</p>
+          </div>
+
+          <div class="tab">Training Left Hand..
+            <p>Move left hand from bottom left corner to bottom right corner. Make sure your hand is in the picture!</p>
+          </div>
+
+          <div class="tab">Training Left Hand...
+            <p>Move left hand from top left corner to bottom left corner. Make sure your hand is in the picture!</p>
+          </div>
+
+          <div class="tab">Training Left Hand....
+            <p>Move left hand from top right corner to bottom right corner. Make sure your hand is in the picture!</p>
+          </div>
+
+          <!-- One "tab" for each step in the form: -->
+          <div class="tab">Training Right Hand.
+            <p>Move right hand from top left corner to top right corner. Make sure your hand is in the picture!</p>
+          </div>
+
+          <div class="tab">Training Right Hand..
+            <p>Move right hand from bottom left corner to bottom right corner. Make sure your hand is in the picture!</p>
+          </div>
+
+          <div class="tab">Training Right Hand...
+            <p>Move right hand from top left corner to bottom left corner. Make sure your hand is in the picture!</p>
+          </div>
+
+          <div class="tab">Training Right Hand....
+            <p>Move right hand from top right corner to bottom right corner. Make sure your hand is in the picture!</p>
+          </div>
+
+          <button type="button" id="recBtn" class="recBtn button alert">Record</button>
+
+          <div style="overflow:auto;">
+            <div style="float:right;">
+              <button type="button" id="prevBtn" class="prevBtn button secondary">Previous</button>
+              <button type="button" id="nextBtn" class="nextBtn button secondary">Next</button>
+            </div>
+          </div>
+
+          
+
+          </form>
+      </div>
+    </div>
   </body>
   <script src="trainingModel.js" type="text/javascript"></script>
   <script src="trainingView.js" type="text/javascript"></script>

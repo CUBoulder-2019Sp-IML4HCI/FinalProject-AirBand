@@ -3,23 +3,28 @@ module.exports = {
 Drum: class {
   // webcam input plus 3 microbit flags (2 for hand hit and 1 for kick)
   constructor () {
-    this.input = [0.0, 0.0, 0.0, 0.0, 0.0]
+    this.input = [];
+    for (var i =0; i < 43; i++) {
+      this.input.push(0.0)
+    }
   }
 
-  updateVideoInput() {
-    
+  updateVideoInput(webcamInputs) {
+    for (var i = 0; i < 40; i++) {
+      this.input[i] = webcamInputs[i];
+    }
   }
 
   updateLeftHand(num) {
-    this.input[2] = parseFloat(num);
+    this.input[40] = parseFloat(num);
   }
 
   updateRightHand(num) {
-    this.input[3] = parseFloat(num);
+    this.input[41] = parseFloat(num);
   }
 
   updateKick(num) {
-    this.input[4] = parseFloat(num);
+    this.input[42] = parseFloat(num);
   }
 
   getInput() {
