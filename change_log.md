@@ -15,6 +15,9 @@ Connecting the Microbit to Wekinator yielded pretty reliable results, which I th
 #### Week 13
 I constructed another flex sensor glove so we can begin testing an air keyboard. I plan to run the output through Wekinator to determine whether or not we can reliably identify finger motion for two hands with minimal latency. I can then begin relating specific finger motions to specific sounds.
 
+#### Week 14
+I transferred the glove circuitry to different gloves that form better to the user's hands and experimented with different fastening methods. I first tried taping either end of the flex sensors of the gloves, but this significantly hindered finger motion. Then I tried just taping one end of the flex sensors and layering a latex glove on the outside of each glove, which works well but is not suitable for various hand sizes.
+
 ## Jack DeMay
 #### Week 10
 I took another group's suggestion of using a 3 Microbit set up with 2 Microbits acting as transmitters and the third Microbit acting as a receiver connected to the computer via USB. While this is a viable configuration, using the radio signal strength to determine distance between the 2 transmitters is simply too noisy and we will most likely end up having to use a Kinect. I also started to modify the jean jacket we purchased on Saturday and am figuring out the best parts of it to incorporate sensors. This will likely be used for the air drummer and could potentially use a camera or an ultrasonic sensor attached to the chest to keep track of the drummer's arm position and movement.
