@@ -17,13 +17,14 @@ while(True):
     
     try:
 
-      x, y, z, direction, strength = map(float, line.split("^"))
+      x, y, z, direction = map(float, line.split("^"))
       acceleration = math.sqrt(x**2 + y**2 + z**2)
+      acceleration2D = math.sqrt(x**2 + y**2)
 
-      print(f"({acceleration}, {direction})")
-
-
-    #   client.send_message("/air_band/keyboard", [acceleration, strength] )
+      print(f"({direction})")
+      
+      client.send_message("/air_band/drum", [direction] )
     except:
-      print('here')
+      # print(line)
+      # print('here')
       pass

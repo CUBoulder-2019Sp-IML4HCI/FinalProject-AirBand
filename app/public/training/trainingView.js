@@ -3,7 +3,8 @@ var TrainingView = function (model) {
     this.updateCurrentEvent = new Event(this);
     this.wekinatorMessage = new Event(this);
 
-    this.steps = [{output: 2, val: 1}, {output: 2, val: 2}, {output: 3, val: 0}, {output: 3, val: 1}, {output: 5, val: 1}, {output: 5, val: 2}, {output: 6, val: 0}, {output: 6, val: 1}]
+    // steps for training keyboard. To update when multiple instruments
+    this.steps = [{output: 1, val: 1}, {output: 1, val: 2}, {output: 2, val: 0}, {output: 2, val: 1}, {output: 7, val: 1}, {output: 7, val: 2}, {output: 8, val: 0}, {output: 8, val: 1}]
 
     this.timer = null;
     this.counter = null;
@@ -136,6 +137,14 @@ TrainingView.prototype = {
         }
     },
 
+    train: function () {
+        this.start_snapping();
+        this.wekinatorMessage.notify({
+            task: "training",
+            msg: {address:"/wekinator/control/train", payload: this.steps[this.currentTab].val, output: this.steps[this.currentTab].output}
+        });
+    },
+
     startRecording: function () {
         this.start_snapping();
         this.wekinatorMessage.notify({
@@ -156,8 +165,8 @@ TrainingView.prototype = {
       // take snapshot and get image data
       Webcam.snap( function(data_uri, canvas, context) {
         // display results in page
-        var w = 40;
-        var h = 75;
+        var w = 10;
+        var h = 15;
         var total = w * h;
         var data = context.getImageData(0,0,400,300).data;
         var lowRes = [];
@@ -180,7 +189,7 @@ TrainingView.prototype = {
             lowRes.push(color);
           }
         }
-        console.log(lowRes);
+        console.log(lowRes.length);
         view.wekinatorMessage.notify({
             task: "webcam",
             msg: {data: lowRes}
@@ -233,7 +242,8 @@ TrainingView.prototype = {
       // if you have reached the end of the form... :
       if (this.currentTab >= this.$tabs.length) {
         //...the form gets submitted:
-        window.location.href = "http://localhost:4243/drum";
+        this.train();
+        window.location.href = "http://localhost:4243/keyboard";
         return false;
       }
       // Otherwise, display the correct tab:

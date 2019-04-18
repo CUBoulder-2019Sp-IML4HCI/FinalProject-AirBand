@@ -43,25 +43,28 @@ Drum: class {
 Keyboard: class {
   // webcam input plus 8 microbit flags (4 fingers each hand)
   constructor () {
-    for (var i =0; i < 108; i++) {
+    this.input = [];
+    for (var i =0; i < 808; i++) {
       this.input.push(0.0)
     }
   }
 
   updateVideoInput(webcamInputs) {
-    for (var i = 0; i < 100; i++) {
-      this.input[i] = webcamInputs[i];
+    for (var i = 0; i < 800; i++) {
+      this.input[8+i] = webcamInputs[i];
     }
   }
 
   updateLeftHand(fingers) {
-    for (var i = 0; i < 100; i++) {
-      this.input[100+i] = fingers[i];
+    for (var i = 0; i < 4; i++) {
+      this.input[i] = fingers[i];
     }
   }
 
   updateRightHand(fingers) {
-    this.input[104+i] = fingers[i];
+    for (var i = 0; i < 4; i++) {
+      this.input[4+i] = fingers[i];
+    }
   }
 
   getInput() {
