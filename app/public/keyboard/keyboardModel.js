@@ -5,8 +5,8 @@ var KeyboardModel = function () {
     this.updateModelEvent = new Event(this);
     this.playSound = new Event(this);
 
-    this.leftHand = {position: 0, hit: 1, fingers: [1,1,1,1]};
-    this.rightHand = {position: 0, hit: 1, fingers: [1,1,1,1]};
+    this.leftHand = {position: 0, playing: false, hit: 2, fingers: [1,1,1,1]};
+    this.rightHand = {position: 0, playing: false, hit: 2, fingers: [1,1,1,1]};
 
  };
 
@@ -16,7 +16,20 @@ var KeyboardModel = function () {
         var osc_address = msg["address"];
         var osc_values = msg["payload"];
         this.keyBoardOutputs = osc_values;
-        this.updateModelEvent.notify({output: this.keyBoardOutputs});
+        
+        this.leftHand.playing = this.leftHand.hit == osc_values[0];
+        this.leftHand.hit = osc_values[0]
+        this.leftHand.position = osc_values[1];
+        this.leftHand.fingers = osc_values.slice(2,6);
+
+
+        this.rightHand.playing = this.rightHand.hit == osc_values[6];
+        this.rightHand.hit = osc_values[6]
+        this.rightHand.position = osc_values[7];
+        this.rightHand.fingers = osc_values.slice(8);
+
+
+        this.updateModelEvent.notify({right: this.rightHand, left:this.leftHand});
         
     },
 

@@ -1,22 +1,5 @@
 var KeyboardView = function (model) {
     this.model = model;
-    this.synth = new Tone.MembraneSynth().toMaster();
-
-    this.kick = new Tone.MembraneSynth().toMaster();
-
-    this.tom = new Tone.MembraneSynth({
-                         pitchDecay: 0.008,
-                         envelope: {attack: 0.01, decay: 0.5, sustain: 0}
-                       }).toMaster();
-
-    this.crash = new Tone.MetalSynth({
-                        frequency: 300,
-                        envelope: {attack: 0.001, decay: 1, release: 3},
-                        harmonicity: 5.1,
-                        modulationIndex: 64,
-                        resonance: 4000,
-                        octaves: 1.5
-                      }).toMaster();
     
     this.updateModelEvent = new Event(this);
 
@@ -24,6 +7,19 @@ var KeyboardView = function (model) {
 
     this.timer = null;
     this.running = false;
+    this.lplaying = false;
+    this.rplaying = false;
+
+    this.leftNotes = [SampleLibrary.load({instruments: "piano"}).toMaster(),
+                     SampleLibrary.load({instruments: "piano"}).toMaster(),
+                     SampleLibrary.load({instruments: "piano"}).toMaster(),
+                     SampleLibrary.load({instruments: "piano"}).toMaster()
+                    ]
+    this.rightNotes = [SampleLibrary.load({instruments: "piano"}).toMaster(),
+                     SampleLibrary.load({instruments: "piano"}).toMaster(),
+                     SampleLibrary.load({instruments: "piano"}).toMaster(),
+                     SampleLibrary.load({instruments: "piano"}).toMaster()
+                    ]
 
     this.init();
 };
@@ -139,21 +135,38 @@ KeyboardView.prototype = {
       }
     },
 
-    show: function (outputs) {
+    playSound: function (left, right) {
+        notes = ['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'G#2']
         // stuff to update the view
-        console.log("show")
+        console.log("show");
         // this.$currentEvent.innerHTML = drumClass
-        if (outputs[0] === 1) {
-            this.kick.triggerAttackRelease('C2', '8n');
+        if (left.hit === 1 && !this.lplaying) {
+            this.lplaying = true;
+            for (var i = 0; i < 4; i++) {
+                if (left.fingers[i] === 1) {
+                    console.log(notes[i])
+                    this.leftNotes[i].triggerAttack(notes[i]);
+                }
+            }
         }
 
-        if (outputs[6] === 1) {
-            this.crash.triggerAttack()
+        if (right.hit === 1 && !this.rplaying) {
+            this.rplaying = true;
+            for (var i = 0; i < 4; i++) {
+                if (right.fingers[i] === 1) {
+                    console.log(notes[4+i])
+                    this.rightNotes[i].triggerAttack(notes[4+i]);
+                }
+            }
         }
 
-        // if (outputs[0] === 2) {
-        //     this.tom.triggerAttackRelease("G3");
-        // }
+        if (left.hit === 2) {
+            this.lplaying = false;
+        }
+
+        if (right.hit === 2) {
+            this.rplaying = false;
+        }
     },
 
 
@@ -185,7 +198,9 @@ KeyboardView.prototype = {
 
     updateModel: function (sender, args) {
         console.log(args);
-        this.show(args["output"]);
+        if (this.running) {
+            this.playSound(args["left"], args["right"]);
+        }
     },
 
     /* -------------------- End Handlers From Event Dispatcher ----------------- */

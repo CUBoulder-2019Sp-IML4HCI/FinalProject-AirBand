@@ -51,23 +51,34 @@ io.on('connection', function(socket){
     output = null;
     if (msg["output"] != undefined){
       outputs = formulateTestOutputs(12);
-      output = msg["output"];
-      outputs[output-1]["value"] = msg["payload"];
+      toTrain = msg["output"];
+      for (var i = 0; i < toTrain.length; i++) {
+        var index = toTrain[i] - 1;
+        outputs[index]["value"] = msg["payload"][i];
+      }
+
       console.log(outputs);
     }
 
-    if (address === "/wekinator/control/startRecording" && output != null) {
+    if (address === "/wekinator/control/startRecording" && toTrain != null) {
       oscClient.send('/wekinator/control/outputs', outputs);
-      oscClient.send('/wekinator/control/enableModelRecording', output);
-    } else if (address === "/wekinator/control/stopRecording" && output != null) {
-      oscClient.send('/wekinator/control/disableModelRecording', output);
+      for (var i = 0; i < toTrain.length; i++) {
+        oscClient.send('/wekinator/control/enableModelRecording', toTrain[i]);
+      }
+    } else if (address === "/wekinator/control/stopRecording" && toTrain != null) {
+      for (var i = 0; i < toTrain.length; i++) {
+        oscClient.send('/wekinator/control/disableModelRecording', toTrain[i]);
+      }
     }
     oscClient.send(msg["address"], msg["payload"]);
   });
 
   // for delete event sent by socket
   socket.on('delete', function(msg) {
-    console.log(msg);
+    oscClient.send('/wekinator/control/deleteExamplesForOutput', 1);
+    oscClient.send('/wekinator/control/deleteExamplesForOutput', 2);
+    oscClient.send('/wekinator/control/deleteExamplesForOutput', 7);
+    oscClient.send('/wekinator/control/deleteExamplesForOutput', 8);
   });
 
   // for run message sent by socket
@@ -103,7 +114,11 @@ oscServer.on("message", function (msg, rinfo) {
 // set up client to communicate to wekinator
 var oscClient = new osc.Client('127.0.0.1', OSC_SEND_PORT);
 console.log('sending OSC packets on *:'+OSC_SEND_PORT);
-// oscClient.send('/wekinator/control/startRecording', '1');
+oscClient.send('/wekinator/control/deleteExamplesForOutput', 1);
+oscClient.send('/wekinator/control/deleteExamplesForOutput', 2);
+oscClient.send('/wekinator/control/deleteExamplesForOutput', 7);
+oscClient.send('/wekinator/control/deleteExamplesForOutput', 8);
+
 
 
 // set up serial port to read micro:bit serial lines
