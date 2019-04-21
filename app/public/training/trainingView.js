@@ -15,6 +15,23 @@ var TrainingView = function (model) {
     this.init();
 };
 
+$('body').keypress(function(e){
+    if (e.which == 32){
+        this.$container.find('.recBtn').click();
+    }
+});
+
+$('body').keypress(function(e){
+    if (e.which == 39){
+        this.$container.find('.next').click();
+    }
+});
+$('body').keypress(function(e){
+    if (e.which == 37){
+        this.$container.find('.prevBtn').click();
+    }
+});
+
 TrainingView.prototype = {
 
     init: function () {
@@ -104,7 +121,7 @@ TrainingView.prototype = {
             this.recording = true;
             this.count = 5;
 
-            this.counter = setInterval(this.countdown, 1000);
+            this.counter = setInterval(this.countdown, 700);
 
             this.$recButton[0].innerHTML = "Stop";
         } else {
