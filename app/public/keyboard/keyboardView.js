@@ -69,6 +69,7 @@ KeyboardView.prototype = {
 
         // this.$addTaskButton.click(this.addTaskButtonHandler);
         this.$startRunningButton.click(this.startRunningButtonHandler);
+        window.onkeydown = this.handleClicks;
         
         /**
          * Event Dispatcher
@@ -76,6 +77,14 @@ KeyboardView.prototype = {
         this.model.updateModelEvent.attach(this.updateModelHandler);
 
         return this;
+    },
+
+    handleClicks: function(e) {
+        console.log(e.code);
+        if (e.code === "Space") {
+            e.preventDefault;
+            view.startRunningButton();
+        }
     },
 
     // addTaskButton: function () {

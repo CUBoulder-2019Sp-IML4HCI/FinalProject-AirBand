@@ -15,23 +15,6 @@ var TrainingView = function (model) {
     this.init();
 };
 
-$('body').keypress(function(e){
-    if (e.which == 32){
-        this.$container.find('.recBtn').click();
-    }
-});
-
-$('body').keypress(function(e){
-    if (e.which == 39){
-        this.$container.find('.next').click();
-    }
-});
-$('body').keypress(function(e){
-    if (e.which == 37){
-        this.$container.find('.prevBtn').click();
-    }
-});
-
 TrainingView.prototype = {
 
     init: function () {
@@ -93,6 +76,8 @@ TrainingView.prototype = {
         this.$nextButton.click(this.nextButtonHandler);
         this.$recButton.click(this.recButtonHandler);
 
+        window.onkeydown = this.handleClicks;
+
         /**
          * Event Dispatcher
          */
@@ -106,6 +91,20 @@ TrainingView.prototype = {
     //         task: "Some Event"
     //     });
     // },
+
+    handleClicks: function(e) {
+        console.log(e.code);
+        if (e.code === "ArrowLeft") {
+            e.preventDefault;
+            view.prevButton();
+        } else if (e.code === "ArrowRight") {
+            e.preventDefault;
+            view.nextButton();
+        } else if (e.code === "Space") {
+            e.preventDefault;
+            view.recButton();
+        }
+    },
 
     nextButton: function () {
         console.log('here');
@@ -131,6 +130,7 @@ TrainingView.prototype = {
             this.$recButton[0].innerHTML = "Record";
         }
     },
+
 
     countdown: function() {
         view.$countdown.innerHTML = view.count;
