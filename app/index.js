@@ -129,7 +129,7 @@ var serialPort = new SerialPort(SERIAL_PORT, {
 // set up the parser to readlines
 var parser = serialPort.pipe(new Readline({ delimiter: '\n' }));
 parser.on('data', function(line) {
-  // console.log(line);
+  console.log(line);
   // All Drum start with #
   // #k is 3g
   // #l is left drum hit)
