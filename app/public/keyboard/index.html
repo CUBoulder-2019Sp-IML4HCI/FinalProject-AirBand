@@ -40,6 +40,9 @@
     var model = new KeyboardModel(),
         view = new KeyboardView(model),
         controller = new KeyboardController(model, view);
+
+    controller.socket.emit("keyboard");
+    
   </script>
   <script>
     $(document).foundation();

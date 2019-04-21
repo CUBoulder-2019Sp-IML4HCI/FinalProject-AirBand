@@ -5,7 +5,7 @@ var WS_PORT=4243
 
 // Update the serial port based on your computer
 var SERIAL_PORT = "/dev/cu.usbmodem1422"
-var INSTRUMENT = "keyboard" 
+var INSTRUMENT = "drum" 
 
 // require osc and serial port
 var osc = require('node-osc');
@@ -22,7 +22,8 @@ var io = require('socket.io')(http);
 
 // load the instrument classes and create model
 var instruments = require('./models.js');
-var model = new instruments.Keyboard();
+var keyboard = new instruments.Keyboard();
+var drum = new instruments.Drum();
 
 // initialized the sockets
 var open_sockets = [];
@@ -49,6 +50,7 @@ io.on('connection', function(socket){
     console.log(msg);
     address = msg["address"];
     output = null;
+    // possibly needs to update for keyboard v. drum
     if (msg["output"] != undefined){
       outputs = formulateTestOutputs(12);
       toTrain = msg["output"];
@@ -74,12 +76,12 @@ io.on('connection', function(socket){
   });
 
   // for delete event sent by socket
-  socket.on('delete', function(msg) {
-    oscClient.send('/wekinator/control/deleteExamplesForOutput', 1);
-    oscClient.send('/wekinator/control/deleteExamplesForOutput', 2);
-    oscClient.send('/wekinator/control/deleteExamplesForOutput', 7);
-    oscClient.send('/wekinator/control/deleteExamplesForOutput', 8);
-  });
+  // socket.on('delete', function(msg) {
+  //   oscClient.send('/wekinator/control/deleteExamplesForOutput', 1);
+  //   oscClient.send('/wekinator/control/deleteExamplesForOutput', 2);
+  //   oscClient.send('/wekinator/control/deleteExamplesForOutput', 7);
+  //   oscClient.send('/wekinator/control/deleteExamplesForOutput', 8);
+  // });
 
   // for run message sent by socket
   socket.on('run', function(msg) {
@@ -88,9 +90,17 @@ io.on('connection', function(socket){
 
   // for run message sent by socket
   socket.on('webcam', function(msg) {
-    data = msg["data"]
-    setTimeout(() => model.updateVideoInput(data), 0);
-    setTimeout(sendData, 0);
+    data = msg["data"];
+    instr = msg["instrument"];
+    console.log(data.length);
+    if (instr === "drum") {
+      setTimeout(() => drum.updateVideoInput(data), 0);
+      setTimeout(() => sendData("drum"), 0);
+    } else if (instr === "keyboard") {
+      setTimeout(() => keyboard.updateVideoInput(data), 0);
+      setTimeout(() => sendData("keyboard"), 0);
+    }
+    
   });
 });
 
@@ -137,14 +147,14 @@ parser.on('data', function(line) {
   var first_two = line.slice(0,2);
   var first_one = line.slice(0,1);
   if (first_two == "#k") { // kick drum
-    setTimeout(() => model.updateKick(line.slice(2)), 0);
+    setTimeout(() => drum.updateKick(line.slice(2)), 0);
     setTimeout(sendData, 0);
   } else if (first_two == "#l") { // left drum hit
-    setTimeout(() => model.updateLeftHand(line.slice(2)), 0);
+    setTimeout(() => drum.updateLeftHand(line.slice(2)), 0);
     setTimeout(sendData, 0);
   } else if (first_two == "#r") { // right drum hit
-    setTimeout(() => model.updateRightHand(line.slice(2)), 0);
-    setTimeout(sendData, 0);
+    setTimeout(() => drum.updateRightHand(line.slice(2)), 0);
+    setTimeout(() => sendData("drum"), 0);
   }
 
   // Flex sensor hands "R" and "L" (but we put micro:bits on the wrong one)
@@ -153,15 +163,15 @@ parser.on('data', function(line) {
     var right = line.slice(2)
     var fingers = right.split('^').map(parseFloat);
     // console.log(fingers);
-    model.updateRightHand(fingers);
-    sendData();
+    setTimeout(() => keybaord.updateRightHand(fingers), 0);
+    setTimeout(() => sendData("keyboard"), 0);
   } else if (first_one == "R") {
     // console.log(line);
     var left = line.slice(2)
     var fingers = left.split('^').map(parseFloat);
     // console.log(fingers);
-    model.updateLeftHand(fingers);
-    sendData();
+    setTimeout(() => keybaord.updateLeftHand(fingers), 0);
+    setTimeout(() => sendData("keyboard"), 0);
   }
 });
 
@@ -169,10 +179,14 @@ console.log('listening for serial packets on *:'+SERIAL_PORT);
 
 
 // function to send data to wekinator
-var sendData = function() {
+var sendData = function(instrument) {
   // console.log("sending data", model.getInput());
   // console.log(model.getInput())
-  oscClient.send('/air_band/'+INSTRUMENT+'/inputs', model.getInput());
+  if (instrument === "keybaord") {
+    oscClient.send('/air_band/keyboard/inputs', keyboard.getInput());
+  } else (instrument === "drum") {
+    oscClient.send('/air_band/drum/inputs', keyboard.getInput());
+  }
 }
 
 var formulateTestOutputs = function(n) {

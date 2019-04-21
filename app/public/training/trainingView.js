@@ -122,7 +122,7 @@ TrainingView.prototype = {
 
             this.counter = setInterval(this.countdown, 700);
 
-            this.$recButton[0].innerHTML = "Stop";
+            // this.$recButton[0].innerHTML = "Stop";
         } else {
             this.recording = false;
             // stop recording
@@ -135,12 +135,15 @@ TrainingView.prototype = {
     countdown: function() {
         view.$countdown.innerHTML = view.count;
         view.count--;
+        view.$recButton[0].innerHTML = view.count + 1;
 
         if (view.count < 0) {
             // start recording
             view.startRecording();
             clearInterval(view.counter);
             view.$countdown.innerHTML = "";
+            view.$recButton[0].innerHTML = "Stop";
+
 
         }
     },

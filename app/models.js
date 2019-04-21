@@ -4,27 +4,27 @@ Drum: class {
   // webcam input plus 3 microbit flags (2 for hand hit and 1 for kick)
   constructor () {
     this.input = [];
-    for (var i =0; i < 43; i++) {
+    for (var i =0; i < 803; i++) {
       this.input.push(0.0)
     }
   }
 
   updateVideoInput(webcamInputs) {
-    for (var i = 0; i < 40; i++) {
-      this.input[i] = webcamInputs[i];
+    for (var i = 0; i < 800; i++) {
+      this.input[3+i] = webcamInputs[i];
     }
   }
 
   updateLeftHand(num) {
-    this.input[40] = parseFloat(num);
+    this.input[0] = parseFloat(num);
   }
 
   updateRightHand(num) {
-    this.input[41] = parseFloat(num);
+    this.input[1] = parseFloat(num);
   }
 
   updateKick(num) {
-    this.input[42] = parseFloat(num);
+    this.input[2] = parseFloat(num);
   }
 
   getInput() {
@@ -44,13 +44,13 @@ Keyboard: class {
   // webcam input plus 8 microbit flags (4 fingers each hand)
   constructor () {
     this.input = [];
-    for (var i =0; i < 808; i++) {
+    for (var i =0; i < 408; i++) {
       this.input.push(0.0)
     }
   }
 
   updateVideoInput(webcamInputs) {
-    for (var i = 0; i < 800; i++) {
+    for (var i = 0; i < 400; i++) {
       this.input[8+i] = webcamInputs[i];
     }
   }
@@ -78,26 +78,5 @@ Keyboard: class {
   }
 
  },
-
-
-// Training Model
-Guitar: class {
-  // webcam input plus 5 microbit flags (4 fingers, 1 strum)
-  constructor() {
-    this.input = []
-  }
-
-  updateVideoInput() {
-    
-  }
-
-  updateFingers() {
-    
-  }
-
-  updateStrum() {
-    
-  }
-
- },
+ 
 }
