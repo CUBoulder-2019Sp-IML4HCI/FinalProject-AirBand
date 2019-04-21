@@ -145,26 +145,28 @@ KeyboardView.prototype = {
     },
 
     playSound: function (left, right) {
-        notes = ['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'G#2']
+        notes = ['C3','C#3' 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3', 'G#3', 'A4', 'A#4', 'B4', 'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A5', 'A#5', 'B5', 'C5']
         // stuff to update the view
         console.log("show");
         // this.$currentEvent.innerHTML = drumClass
         if (left.hit === 1 && !this.lplaying) {
             this.lplaying = true;
+            var index = left.position;
             for (var i = 0; i < 4; i++) {
                 if (left.fingers[i] === 1) {
-                    console.log(notes[i])
-                    this.leftNotes[i].triggerAttack(notes[i]);
+                    console.log(notes[index+i])
+                    this.leftNotes[i].triggerAttack(notes[index+i]);
                 }
             }
         }
 
         if (right.hit === 1 && !this.rplaying) {
             this.rplaying = true;
+            var index = right.position;
             for (var i = 0; i < 4; i++) {
                 if (right.fingers[i] === 1) {
-                    console.log(notes[4+i])
-                    this.rightNotes[i].triggerAttack(notes[4+i]);
+                    console.log(notes[index+i])
+                    this.rightNotes[i].triggerAttack(notes[index+i]);
                 }
             }
         }
