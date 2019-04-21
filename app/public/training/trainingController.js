@@ -11,6 +11,8 @@ TrainingController.prototype = {
     init: function () {
         this.setupHandlers()
             .enable();
+
+        this.socket.emit("delete", 2);
     },
 
     setupHandlers: function () {

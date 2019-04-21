@@ -1,7 +1,25 @@
 var KeyboardView = function (model) {
     this.model = model;
-    this.synth = new Tone.MembraneSynth().toMaster();
-    this.updateCurrentEvent = new Event(this);
+    
+    this.updateModelEvent = new Event(this);
+
+    this.wekinatorMessage = new Event(this);
+
+    this.timer = null;
+    this.running = false;
+    this.lplaying = false;
+    this.rplaying = false;
+
+    this.leftNotes = [SampleLibrary.load({instruments: "piano"}).toMaster(),
+                     SampleLibrary.load({instruments: "piano"}).toMaster(),
+                     SampleLibrary.load({instruments: "piano"}).toMaster(),
+                     SampleLibrary.load({instruments: "piano"}).toMaster()
+                    ]
+    this.rightNotes = [SampleLibrary.load({instruments: "piano"}).toMaster(),
+                     SampleLibrary.load({instruments: "piano"}).toMaster(),
+                     SampleLibrary.load({instruments: "piano"}).toMaster(),
+                     SampleLibrary.load({instruments: "piano"}).toMaster()
+                    ]
 
     this.init();
 };
@@ -12,12 +30,23 @@ KeyboardView.prototype = {
         this.createChildren()
             .setupHandlers()
             .enable();
+
+        Webcam.set({
+          width: 400,
+          height: 300,
+          image_format: 'jpeg',
+          jpeg_quality: 90,
+          flip_horiz: true
+        });
+
+        Webcam.attach( '#my_camera' );
     },
 
     createChildren: function () {
         // cache the document object
         this.$container = $('.body-container');
         this.$currentEvent = this.$container.find('#currentEvent')[0];
+        this.$startRunningButton = this.$container.find('.js-run');
 
         return this;
     },
@@ -26,11 +55,12 @@ KeyboardView.prototype = {
 
         // If the event is handled by a button or an element event on the page
         // this.addTaskButtonHandler = this.addTaskButton.bind(this);
-
+        this.startRunningButtonHandler = this.startRunningButton.bind(this);
+        
         /**
         Handlers from Event Dispatcher
         */
-        this.updateCurrentHandler = this.updateCurrent.bind(this);
+        this.updateModelHandler = this.updateModel.bind(this);
 
         return this;
     },
@@ -38,13 +68,23 @@ KeyboardView.prototype = {
     enable: function () {
 
         // this.$addTaskButton.click(this.addTaskButtonHandler);
-
+        this.$startRunningButton.click(this.startRunningButtonHandler);
+        window.onkeydown = this.handleClicks;
+        
         /**
          * Event Dispatcher
          */
-        this.model.updateCurrentEvent.attach(this.updateCurrentHandler);
+        this.model.updateModelEvent.attach(this.updateModelHandler);
 
         return this;
+    },
+
+    handleClicks: function(e) {
+        console.log(e.code);
+        if (e.code === "Space") {
+            e.preventDefault;
+            view.startRunningButton();
+        }
     },
 
     // addTaskButton: function () {
@@ -53,12 +93,112 @@ KeyboardView.prototype = {
     //     });
     // },
 
-    show: function (keyboardClass) {
+    take_snapshot: function() {
+      // take snapshot and get image data
+      Webcam.snap( function(data_uri, canvas, context) {
+        // display results in page
+        var w = 10;
+        var h = 15;
+        var total = w * h;
+        var data = context.getImageData(0,0,400,300).data;
+        var lowRes = [];
+
+        // times width by 4 because 4 points of data per pixel
+        for (var x = 0; x < (400*4); x += (w*4)) { 
+          for (var y = 150; y < (300); y += (h)) {
+            var red = 0, green = 0, blue = 0;
+        
+            for (var i = 0; i < (w*4); i+=4) {
+              for (var j = 0; j < (h); j+=1) {
+                var index = (x + i) + (y + j) * (400*4);
+                red += data[index];
+                green += data[index+1];
+                blue += data[index+2];
+              }
+            }
+            // RGB = (R*65536)+(G*256)+B
+            var color = (red*65536)+(green*256)+blue;
+            lowRes.push(color);
+          }
+        }
+        // Make sure it is 400 inputs
+        // console.log(lowRes.length);
+        view.wekinatorMessage.notify({
+            task: "webcam",
+            msg: {data: lowRes},
+            instrument: "keyboard",
+        });
+      } );
+    },
+    
+    start_snapping: function() {
+      if (!this.timer) {
+        this.take_snapshot();
+        this.timer = setInterval(this.take_snapshot, 250 );
+      }
+    },
+    
+    stop_snapping: function() {
+      if (this.timer) {
+        clearTimeout( this.timer );
+        this.timer = null;
+      }
+    },
+
+    playSound: function (left, right) {
+        notes = ['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'G#2']
         // stuff to update the view
-        // console.log(this.$currentEvent)
-        this.$currentEvent.innerHTML = keyboardClass
-        if (keyboardClass === 2) {
-            this.synth.triggerAttackRelease("C2", "8n");
+        console.log("show");
+        // this.$currentEvent.innerHTML = drumClass
+        if (left.hit === 1 && !this.lplaying) {
+            this.lplaying = true;
+            for (var i = 0; i < 4; i++) {
+                if (left.fingers[i] === 1) {
+                    console.log(notes[i])
+                    this.leftNotes[i].triggerAttack(notes[i]);
+                }
+            }
+        }
+
+        if (right.hit === 1 && !this.rplaying) {
+            this.rplaying = true;
+            for (var i = 0; i < 4; i++) {
+                if (right.fingers[i] === 1) {
+                    console.log(notes[4+i])
+                    this.rightNotes[i].triggerAttack(notes[4+i]);
+                }
+            }
+        }
+
+        if (left.hit === 2) {
+            this.lplaying = false;
+        }
+
+        if (right.hit === 2) {
+            this.rplaying = false;
+        }
+    },
+
+
+    /* Events */
+
+    startRunningButton: function () {
+        if (this.running) {
+            this.running = false;
+            this.$startRunningButton[0].innerHTML = "Start Running";
+            this.stop_snapping();
+            this.wekinatorMessage.notify({
+                task: "run",
+                msg: {address:"/wekinator/control/stopRunning", payload: 1}
+            });
+        } else {
+            this.running = true;
+            this.$startRunningButton[0].innerHTML = "Stop Running";
+            this.start_snapping();
+            this.wekinatorMessage.notify({
+                task: "run",
+                msg: {address:"/wekinator/control/startRunning", payload: 1}
+            });
         }
     },
 
@@ -66,9 +206,11 @@ KeyboardView.prototype = {
 
     /* -------------------- Handlers From Event Dispatcher ----------------- */
 
-    updateCurrent: function (sender, args) {
+    updateModel: function (sender, args) {
         console.log(args);
-        this.show(args["keyboardClass"]);
+        if (this.running) {
+            this.playSound(args["left"], args["right"]);
+        }
     },
 
     /* -------------------- End Handlers From Event Dispatcher ----------------- */

@@ -1,20 +1,54 @@
 var DrumView = function (model) {
     this.model = model;
     this.kick = new Tone.MembraneSynth().toMaster();
-
-    this.tom = new Tone.MembraneSynth({
+    this.tomLow = new Tone
+                       .MembraneSynth({
                          pitchDecay: 0.008,
                          envelope: {attack: 0.01, decay: 0.5, sustain: 0}
-                       }).toMaster();
-
-    this.crash = new Tone.MetalSynth({
+                       })
+                       .toMaster();
+    this.tomMid = new Tone
+                       .MembraneSynth({
+                         pitchDecay: 0.008,
+                         envelope: {attack: 0.01, decay: 0.5, sustain: 0}
+                       })
+                       .toMaster();
+    this.tomHigh = new Tone
+                        .MembraneSynth({
+                          pitchDecay: 0.008,
+                          envelope: {attack: 0.01, decay: 0.5, sustain: 0}
+                        })
+                        .toMaster();
+    this.closedHihat =
+      new Tone
+          .MetalSynth({
+            frequency: 400,
+            envelope: {attack: 0.001, decay: 0.1, release: 0.8},
+            harmonicity: 5.1,
+            modulationIndex: 32,
+            resonance: 4000,
+            octaves: 1
+          })
+          .toMaster();
+    this.ride = new Tone.MetalSynth().toMaster();
+    this.crash = new Tone
+                      .MetalSynth({
                         frequency: 300,
                         envelope: {attack: 0.001, decay: 1, release: 3},
                         harmonicity: 5.1,
                         modulationIndex: 64,
                         resonance: 4000,
                         octaves: 1.5
-                      }).toMaster();
+                      })
+                      .toMaster();
+    this.snare =
+      new Tone
+          .NoiseSynth({
+            noise: {type: 'white'},
+            envelope: {attack: 0.005, decay: 0.05, sustain: 0.1, release: 0.4}
+          })
+          .toMaster();
+
     this.updateModelEvent = new Event(this);
 
     this.wekinatorMessage = new Event(this);
@@ -32,8 +66,8 @@ DrumView.prototype = {
             .enable();
 
         Webcam.set({
-          width: 320,
-          height: 240,
+          width: 400,
+          height: 300,
           image_format: 'jpeg',
           jpeg_quality: 90,
           flip_horiz: true
@@ -46,11 +80,7 @@ DrumView.prototype = {
         // cache the document object
         this.$container = $('.body-container');
         this.$currentEvent = this.$container.find('#currentEvent')[0];
-        this.$startRecButton = this.$container.find('.js-startRec');
-        this.$stopRecButton = this.$container.find('.js-stopRec');
-        this.$clearExamplesButton = this.$container.find('.js-clear');
         this.$startRunningButton = this.$container.find('.js-run');
-        this.$trainButton = this.$container.find('.js-train');
 
         return this;
     },
@@ -58,12 +88,9 @@ DrumView.prototype = {
     setupHandlers: function () {
 
         // If the event is handled by a button or an element event on the page
-        this.startRecButtonHandler = this.startRecButton.bind(this);
-        this.stopRecButtonHandler = this.stopRecButton.bind(this);
-        this.clearExamplesButtonHander = this.clearExamplesButton.bind(this);
+        // this.addTaskButtonHandler = this.addTaskButton.bind(this);
         this.startRunningButtonHandler = this.startRunningButton.bind(this);
-        this.trainButtonHandler = this.trainButton.bind(this);
-
+        
         /**
         Handlers from Event Dispatcher
         */
@@ -74,12 +101,10 @@ DrumView.prototype = {
 
     enable: function () {
 
-        this.$startRecButton.click(this.startRecButtonHandler);
-        this.$stopRecButton.click(this.stopRecButtonHandler);
-        this.$clearExamplesButton.click(this.clearExamplesButtonHander);
+        // this.$addTaskButton.click(this.addTaskButtonHandler);
         this.$startRunningButton.click(this.startRunningButtonHandler);
-        this.$trainButton.click(this.trainButtonHandler);
-
+        window.onkeydown = this.handleClicks;
+        
         /**
          * Event Dispatcher
          */
@@ -87,25 +112,33 @@ DrumView.prototype = {
 
         return this;
     },
+
+    handleClicks: function(e) {
+        console.log(e.code);
+        if (e.code === "Space") {
+            e.preventDefault;
+            view.startRunningButton();
+        }
+    },
     
     take_snapshot: function() {
       // take snapshot and get image data
       Webcam.snap( function(data_uri, canvas, context) {
         // display results in page
-        var w = 32;
-        var h = 60;
+        var w = 10;
+        var h = 15;
         var total = w * h;
-        var data = context.getImageData(0,0,320,240).data;
+        var data = context.getImageData(0,0,400,300).data;
         var lowRes = [];
 
         // times width by 4 because 4 points of data per pixel
-        for (var x = 0; x < (320*4); x += (w*4)) { 
-          for (var y = 0; y < (240); y += (h)) {
+        for (var x = 0; x < (400*4); x += (w*4)) { 
+          for (var y = 0; y < (300); y += (h)) {
             var red = 0, green = 0, blue = 0;
         
             for (var i = 0; i < (w*4); i+=4) {
               for (var j = 0; j < (h); j+=1) {
-                var index = (x + i) + (y + j) * (320*4);
+                var index = (x + i) + (y + j) * (400*4);
                 red += data[index];
                 green += data[index+1];
                 blue += data[index+2];
@@ -116,10 +149,12 @@ DrumView.prototype = {
             lowRes.push(color);
           }
         }
-        console.log(lowRes);
+        // Make sure it is 800 inputs
+        // console.log(lowRes.length);
         view.wekinatorMessage.notify({
             task: "webcam",
-            msg: {data: lowRes}
+            msg: {data: lowRes},
+            instrument: "drum",
         });
       } );
     },
@@ -139,62 +174,30 @@ DrumView.prototype = {
     },
     
 
-    show: function (outputs) {
-        // stuff to update the view
-        // console.log(this.$currentEvent)
-        // this.$currentEvent.innerHTML = drumClass
-        if (outputs[6] === 2) {
-            this.kick.triggerAttackRelease('C2', '8n');
-        }
-
-        if (outputs[3] === 2) {
-            this.crash.triggerAttack()
-        }
-
-        if (outputs[0] === 2) {
-            this.tom.triggerAttackRelease("G3");
-        }
+    playSound: function (left, right) {
+        // what it gonna do
     },
 
     /* events */
 
-    startRecButton: function () {
-        this.start_snapping();
-        this.wekinatorMessage.notify({
-            task: "training",
-            msg: {address:"/wekinator/control/startRecording", payload: 1}
-        });
-    },
-
-    stopRecButton: function () {
-        this.stop_snapping();
-        this.wekinatorMessage.notify({
-            task: "training",
-            msg: {address:"/wekinator/control/stopRecording", payload: 1}
-        });
-    },
-
-    trainButton: function () {
-        this.wekinatorMessage.notify({
-            task: "training",
-            msg: {address:"/wekinator/control/train", payload: 1}
-        });
-    },
-
-    clearExamplesButton: function () {
-        this.stop_snapping();
-        // this.wekinatorMessage.notify({
-        //     task: "delete",
-        //     msg: {address:"/wekinator/control/deleteExamplesForOutput", payload: 1}
-        // });
-    },
-
     startRunningButton: function () {
-        this.start_snapping();
-        this.wekinatorMessage.notify({
-            task: "run",
-            msg: {address:"/wekinator/control/startRunning", payload: 1}
-        });
+        if (this.running) {
+            this.running = false;
+            this.$startRunningButton[0].innerHTML = "Start Running";
+            this.stop_snapping();
+            this.wekinatorMessage.notify({
+                task: "run",
+                msg: {address:"/wekinator/control/stopRunning", payload: 1}
+            });
+        } else {
+            this.running = true;
+            this.$startRunningButton[0].innerHTML = "Stop Running";
+            this.start_snapping();
+            this.wekinatorMessage.notify({
+                task: "run",
+                msg: {address:"/wekinator/control/startRunning", payload: 1}
+            });
+        }
     },
 
 
@@ -203,7 +206,7 @@ DrumView.prototype = {
 
     updateModel: function (sender, args) {
         console.log(args);
-        this.show(args["output"]);
+        // something with play sounds here prob
     },
 
     /* -------------------- End Handlers From Event Dispatcher ----------------- */

@@ -1,29 +1,35 @@
 var KeyboardModel = function () {
-    this.keyboardClasses = []
-    this.keyboardClass = -1;
-    this.updateCurrentEvent = new Event(this);
+    
+    this.keyBoardOutputs = [0,0,0,0,0,0,0,0,0,0,0,0]
+
+    this.updateModelEvent = new Event(this);
+    this.playSound = new Event(this);
+
+    this.leftHand = {position: 0, playing: false, hit: 2, fingers: [1,1,1,1]};
+    this.rightHand = {position: 0, playing: false, hit: 2, fingers: [1,1,1,1]};
 
  };
 
  KeyboardModel.prototype = {
 
-    updateCurrent: function (msg) {
+    updateModel: function (msg) {
         var osc_address = msg["address"];
         var osc_values = msg["payload"];
-        if (this.keyboardClasses.length === 7) {
-            this.keyboardClasses = this.keyboardClasses.slice(1);
-        }
-        this.keyboardClasses.push(osc_values[0]);
-        // var mostFreq = this.mostFreqClass();
-        // if (this.keyboardClass != mostFreq) {
-        //     this.keyboardClass = mostFreq;
-        //     this.updateCurrentEvent.notify({keyboardClass: this.keyboardClass});
-        // }
-        var newCls = osc_values[0];
-        if (this.keyboardClass != newCls) {
-           this.keyboardClass = newCls;
-            this.updateCurrentEvent.notify({keyboardClass: this.keyboardClass}); 
-        }
+        this.keyBoardOutputs = osc_values;
+        
+        this.leftHand.playing = this.leftHand.hit == osc_values[0];
+        this.leftHand.hit = osc_values[0]
+        this.leftHand.position = osc_values[1];
+        this.leftHand.fingers = osc_values.slice(2,6);
+
+
+        this.rightHand.playing = this.rightHand.hit == osc_values[6];
+        this.rightHand.hit = osc_values[6]
+        this.rightHand.position = osc_values[7];
+        this.rightHand.fingers = osc_values.slice(8);
+
+
+        this.updateModelEvent.notify({right: this.rightHand, left:this.leftHand});
         
     },
 

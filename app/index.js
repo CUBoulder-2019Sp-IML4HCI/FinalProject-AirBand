@@ -22,7 +22,8 @@ var io = require('socket.io')(http);
 
 // load the instrument classes and create model
 var instruments = require('./models.js');
-var model = new instruments.Drum();
+var keyboard = new instruments.Keyboard();
+var drum = new instruments.Drum();
 
 // initialized the sockets
 var open_sockets = [];
@@ -49,26 +50,38 @@ io.on('connection', function(socket){
     console.log(msg);
     address = msg["address"];
     output = null;
+    // possibly needs to update for keyboard v. drum
     if (msg["output"] != undefined){
-      outputs = formulateTestOutputs(7);
-      output = msg["output"];
-      outputs[output-1]["value"] = msg["payload"];
+      outputs = formulateTestOutputs(12);
+      toTrain = msg["output"];
+      for (var i = 0; i < toTrain.length; i++) {
+        var index = toTrain[i] - 1;
+        outputs[index]["value"] = msg["payload"][i];
+      }
+
       console.log(outputs);
     }
 
-    if (address === "/wekinator/control/startRecording" && output != null) {
+    if (address === "/wekinator/control/startRecording" && toTrain != null) {
       oscClient.send('/wekinator/control/outputs', outputs);
-      oscClient.send('/wekinator/control/enableModelRecording', output);
-    } else if (address === "/wekinator/control/stopRecording" && output != null) {
-      oscClient.send('/wekinator/control/disableModelRecording', output);
+      for (var i = 0; i < toTrain.length; i++) {
+        oscClient.send('/wekinator/control/enableModelRecording', toTrain[i]);
+      }
+    } else if (address === "/wekinator/control/stopRecording" && toTrain != null) {
+      for (var i = 0; i < toTrain.length; i++) {
+        oscClient.send('/wekinator/control/disableModelRecording', toTrain[i]);
+      }
     }
     oscClient.send(msg["address"], msg["payload"]);
   });
 
   // for delete event sent by socket
-  socket.on('delete', function(msg) {
-    console.log(msg);
-  });
+  // socket.on('delete', function(msg) {
+  //   oscClient.send('/wekinator/control/deleteExamplesForOutput', 1);
+  //   oscClient.send('/wekinator/control/deleteExamplesForOutput', 2);
+  //   oscClient.send('/wekinator/control/deleteExamplesForOutput', 7);
+  //   oscClient.send('/wekinator/control/deleteExamplesForOutput', 8);
+  // });
 
   // for run message sent by socket
   socket.on('run', function(msg) {
@@ -77,9 +90,17 @@ io.on('connection', function(socket){
 
   // for run message sent by socket
   socket.on('webcam', function(msg) {
-    data = msg["data"]
-    setTimeout(() => model.updateVideoInput(data), 0);
-    setTimeout(sendData, 0);
+    data = msg["data"];
+    instr = msg["instrument"];
+    console.log(data.length);
+    if (instr === "drum") {
+      setTimeout(() => drum.updateVideoInput(data), 0);
+      setTimeout(() => sendData("drum"), 0);
+    } else if (instr === "keyboard") {
+      setTimeout(() => keyboard.updateVideoInput(data), 0);
+      setTimeout(() => sendData("keyboard"), 0);
+    }
+    
   });
 });
 
@@ -103,9 +124,13 @@ oscServer.on("message", function (msg, rinfo) {
 // set up client to communicate to wekinator
 var oscClient = new osc.Client('127.0.0.1', OSC_SEND_PORT);
 console.log('sending OSC packets on *:'+OSC_SEND_PORT);
-// oscClient.send('/wekinator/control/startRecording', '1');
+oscClient.send('/wekinator/control/deleteExamplesForOutput', 1);
+oscClient.send('/wekinator/control/deleteExamplesForOutput', 2);
+oscClient.send('/wekinator/control/deleteExamplesForOutput', 7);
+oscClient.send('/wekinator/control/deleteExamplesForOutput', 8);
 
-/*
+
+
 // set up serial port to read micro:bit serial lines
 var serialPort = new SerialPort(SERIAL_PORT, {
   baudRate: 115200,
@@ -115,29 +140,53 @@ var serialPort = new SerialPort(SERIAL_PORT, {
 var parser = serialPort.pipe(new Readline({ delimiter: '\n' }));
 parser.on('data', function(line) {
   // console.log(line);
-  // this is current testing function
+  // All Drum start with #
   // #k is 3g
-  // #l is A button (though could eventually be left hand hit)
-  // #r is B button (though could eventually be right hand hit)
-  if (line.slice(0,2) == "#k") { // kick drum
-    setTimeout(() => model.updateKick(line.slice(2)), 0);
+  // #l is left drum hit)
+  // #r is right drum hit)
+  var first_two = line.slice(0,2);
+  var first_one = line.slice(0,1);
+  if (first_two == "#k") { // kick drum
+    setTimeout(() => drum.updateKick(line.slice(2)), 0);
     setTimeout(sendData, 0);
-  } else if (line.slice(0,2) == "#l") { // left drum hit
-    setTimeout(() => model.updateLeftHand(line.slice(2)), 0);
+  } else if (first_two == "#l") { // left drum hit
+    setTimeout(() => drum.updateLeftHand(line.slice(2)), 0);
     setTimeout(sendData, 0);
-  } else if (line.slice(0,2) == "#r") { // right drum hit
-    setTimeout(() => model.updateRightHand(line.slice(2)), 0);
-    setTimeout(sendData, 0);
+  } else if (first_two == "#r") { // right drum hit
+    setTimeout(() => drum.updateRightHand(line.slice(2)), 0);
+    setTimeout(() => sendData("drum"), 0);
+  }
+
+  // Flex sensor hands "R" and "L" (but we put micro:bits on the wrong one)
+  else if (first_one == "L") {
+    // console.log(line);
+    var right = line.slice(2)
+    var fingers = right.split('^').map(parseFloat);
+    // console.log(fingers);
+    setTimeout(() => keybaord.updateRightHand(fingers), 0);
+    setTimeout(() => sendData("keyboard"), 0);
+  } else if (first_one == "R") {
+    // console.log(line);
+    var left = line.slice(2)
+    var fingers = left.split('^').map(parseFloat);
+    // console.log(fingers);
+    setTimeout(() => keybaord.updateLeftHand(fingers), 0);
+    setTimeout(() => sendData("keyboard"), 0);
   }
 });
 
 console.log('listening for serial packets on *:'+SERIAL_PORT);
-*/
+
 
 // function to send data to wekinator
-var sendData = function() {
+var sendData = function(instrument) {
   // console.log("sending data", model.getInput());
-  oscClient.send('/air_band/drum/inputs', model.getInput());
+  // console.log(model.getInput())
+  if (instrument === "keybaord") {
+    oscClient.send('/air_band/keyboard/inputs', keyboard.getInput());
+  } else (instrument === "drum") {
+    oscClient.send('/air_band/drum/inputs', keyboard.getInput());
+  }
 }
 
 var formulateTestOutputs = function(n) {

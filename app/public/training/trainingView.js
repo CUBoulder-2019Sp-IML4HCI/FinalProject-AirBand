@@ -3,7 +3,8 @@ var TrainingView = function (model) {
     this.updateCurrentEvent = new Event(this);
     this.wekinatorMessage = new Event(this);
 
-    this.steps = [{output: 2, val: 1}, {output: 2, val: 2}, {output: 3, val: 0}, {output: 3, val: 1}, {output: 5, val: 1}, {output: 5, val: 2}, {output: 6, val: 0}, {output: 6, val: 1}]
+    // steps for training keyboard. To update when multiple instruments
+    this.steps = [{output: [1,2], val: [1,0]}, {output: [1,2], val: [1,.5]}, {output: [1,2], val: [1,1]}, {output: [7,8], val: [1,0]}, {output: [7,8], val: [1,.5]}, {output: [7,8], val: [1,1]}, {output: [1,7], val: [2,2]}]
 
     this.timer = null;
     this.counter = null;
@@ -75,6 +76,8 @@ TrainingView.prototype = {
         this.$nextButton.click(this.nextButtonHandler);
         this.$recButton.click(this.recButtonHandler);
 
+        window.onkeydown = this.handleClicks;
+
         /**
          * Event Dispatcher
          */
@@ -88,6 +91,20 @@ TrainingView.prototype = {
     //         task: "Some Event"
     //     });
     // },
+
+    handleClicks: function(e) {
+        console.log(e.code);
+        if (e.code === "ArrowLeft") {
+            e.preventDefault;
+            view.prevButton();
+        } else if (e.code === "ArrowRight") {
+            e.preventDefault;
+            view.nextButton();
+        } else if (e.code === "Space") {
+            e.preventDefault;
+            view.recButton();
+        }
+    },
 
     nextButton: function () {
         console.log('here');
@@ -103,9 +120,9 @@ TrainingView.prototype = {
             this.recording = true;
             this.count = 5;
 
-            this.counter = setInterval(this.countdown, 1000);
+            this.counter = setInterval(this.countdown, 700);
 
-            this.$recButton[0].innerHTML = "Stop";
+            // this.$recButton[0].innerHTML = "Stop";
         } else {
             this.recording = false;
             // stop recording
@@ -114,15 +131,19 @@ TrainingView.prototype = {
         }
     },
 
+
     countdown: function() {
         view.$countdown.innerHTML = view.count;
         view.count--;
+        view.$recButton[0].innerHTML = view.count + 1;
 
         if (view.count < 0) {
             // start recording
             view.startRecording();
             clearInterval(view.counter);
             view.$countdown.innerHTML = "";
+            view.$recButton[0].innerHTML = "Stop";
+
 
         }
     },
@@ -134,6 +155,14 @@ TrainingView.prototype = {
         if (trainingClass === 2) {
             this.synth.triggerAttackRelease("C2", "8n");
         }
+    },
+
+    train: function () {
+        this.start_snapping();
+        this.wekinatorMessage.notify({
+            task: "training",
+            msg: {address:"/wekinator/control/train", payload: 1}
+        });
     },
 
     startRecording: function () {
@@ -156,8 +185,8 @@ TrainingView.prototype = {
       // take snapshot and get image data
       Webcam.snap( function(data_uri, canvas, context) {
         // display results in page
-        var w = 40;
-        var h = 75;
+        var w = 10;
+        var h = 15;
         var total = w * h;
         var data = context.getImageData(0,0,400,300).data;
         var lowRes = [];
@@ -180,7 +209,7 @@ TrainingView.prototype = {
             lowRes.push(color);
           }
         }
-        console.log(lowRes);
+        console.log(lowRes.length);
         view.wekinatorMessage.notify({
             task: "webcam",
             msg: {data: lowRes}
@@ -233,7 +262,8 @@ TrainingView.prototype = {
       // if you have reached the end of the form... :
       if (this.currentTab >= this.$tabs.length) {
         //...the form gets submitted:
-        window.location.href = "http://localhost:4243/drum";
+        this.train();
+        window.location.href = "http://localhost:4243/keyboard";
         return false;
       }
       // Otherwise, display the correct tab:
