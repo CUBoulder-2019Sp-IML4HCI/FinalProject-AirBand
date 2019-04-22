@@ -150,11 +150,10 @@ DrumView.prototype = {
           }
         }
         // Make sure it is 800 inputs
-        // console.log(lowRes.length);
+        console.log(lowRes);
         view.wekinatorMessage.notify({
             task: "webcam",
-            msg: {data: lowRes},
-            instrument: "drum",
+            msg: {data: lowRes, instrument: "drum"},
         });
       } );
     },

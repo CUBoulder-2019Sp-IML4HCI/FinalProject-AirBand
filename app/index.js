@@ -4,7 +4,7 @@ var OSC_SEND_PORT = 6448
 var WS_PORT=4243
 
 // Update the serial port based on your computer
-var SERIAL_PORT = "/dev/cu.usbmodem1422"
+var SERIAL_PORT = "/dev/cu.usbmodem1412"
 var INSTRUMENT = "drum" 
 
 // require osc and serial port
@@ -92,8 +92,9 @@ io.on('connection', function(socket){
   socket.on('webcam', function(msg) {
     data = msg["data"];
     instr = msg["instrument"];
-    console.log(data.length);
+    console.log(instr);
     if (instr === "drum") {
+      console.log('here');
       setTimeout(() => drum.updateVideoInput(data), 0);
       setTimeout(() => sendData("drum"), 0);
     } else if (instr === "keyboard") {
@@ -146,13 +147,13 @@ parser.on('data', function(line) {
   // #r is right drum hit)
   var first_two = line.slice(0,2);
   var first_one = line.slice(0,1);
-  if (first_two == "#k") { // kick drum
+  if (first_one == "K") { // kick drum
     setTimeout(() => drum.updateKick(line.slice(2)), 0);
     setTimeout(sendData, 0);
-  } else if (first_two == "#l") { // left drum hit
+  } else if (first_one == "LE") { // left drum hit
     setTimeout(() => drum.updateLeftHand(line.slice(2)), 0);
     setTimeout(sendData, 0);
-  } else if (first_two == "#r") { // right drum hit
+  } else if (first_one == "RI") { // right drum hit
     setTimeout(() => drum.updateRightHand(line.slice(2)), 0);
     setTimeout(() => sendData("drum"), 0);
   }
@@ -163,14 +164,14 @@ parser.on('data', function(line) {
     var right = line.slice(2)
     var fingers = right.split('^').map(parseFloat);
     // console.log(fingers);
-    setTimeout(() => keybaord.updateRightHand(fingers), 0);
+    setTimeout(() => keyboard.updateRightHand(fingers), 0);
     setTimeout(() => sendData("keyboard"), 0);
   } else if (first_one == "R") {
     // console.log(line);
     var left = line.slice(2)
     var fingers = left.split('^').map(parseFloat);
     // console.log(fingers);
-    setTimeout(() => keybaord.updateLeftHand(fingers), 0);
+    setTimeout(() => keyboard.updateLeftHand(fingers), 0);
     setTimeout(() => sendData("keyboard"), 0);
   }
 });
@@ -180,12 +181,12 @@ console.log('listening for serial packets on *:'+SERIAL_PORT);
 
 // function to send data to wekinator
 var sendData = function(instrument) {
-  // console.log("sending data", model.getInput());
-  // console.log(model.getInput())
-  if (instrument === "keybaord") {
+  console.log("sending data");
+  console.log(drum.getInput())
+  if (instrument === "keyboard") {
     oscClient.send('/air_band/keyboard/inputs', keyboard.getInput());
-  } else (instrument === "drum") {
-    oscClient.send('/air_band/drum/inputs', keyboard.getInput());
+  } else if(instrument === "drum") {
+    oscClient.send('/air_band/drum/inputs', drum.getInput());
   }
 }
 
