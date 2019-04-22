@@ -97,7 +97,7 @@ KeyboardView.prototype = {
       // take snapshot and get image data
       Webcam.snap( function(data_uri, canvas, context) {
         // display results in page
-        var w = 10;
+        var w = 5;
         var h = 15;
         var total = w * h;
         var data = context.getImageData(0,0,400,300).data;
@@ -105,7 +105,7 @@ KeyboardView.prototype = {
 
         // times width by 4 because 4 points of data per pixel
         for (var x = 0; x < (400*4); x += (w*4)) { 
-          for (var y = 0; y < (300); y += (h)) {
+          for (var y = 150; y < (300); y += (h)) {
             var red = 0, green = 0, blue = 0;
         
             for (var i = 0; i < (w*4); i+=4) {
@@ -145,26 +145,28 @@ KeyboardView.prototype = {
     },
 
     playSound: function (left, right) {
-        notes = ['A2', 'B2', 'C2', 'D2', 'E2', 'F2', 'G2', 'G#2']
+        notes = ['C3','C#3' 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3', 'G#3', 'A4', 'A#4', 'B4', 'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A5', 'A#5', 'B5', 'C5']
         // stuff to update the view
         console.log("show");
         // this.$currentEvent.innerHTML = drumClass
         if (left.hit === 1 && !this.lplaying) {
             this.lplaying = true;
+            var index = left.position;
             for (var i = 0; i < 4; i++) {
                 if (left.fingers[i] === 1) {
-                    console.log(notes[i])
-                    this.leftNotes[i].triggerAttack(notes[i]);
+                    console.log(notes[index+i])
+                    this.leftNotes[i].triggerAttack(notes[index+i]);
                 }
             }
         }
 
         if (right.hit === 1 && !this.rplaying) {
             this.rplaying = true;
+            var index = right.position;
             for (var i = 0; i < 4; i++) {
                 if (right.fingers[i] === 1) {
-                    console.log(notes[4+i])
-                    this.rightNotes[i].triggerAttack(notes[4+i]);
+                    console.log(notes[index+i])
+                    this.rightNotes[i].triggerAttack(notes[index+i]);
                 }
             }
         }
