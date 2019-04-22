@@ -97,7 +97,7 @@ KeyboardView.prototype = {
       // take snapshot and get image data
       Webcam.snap( function(data_uri, canvas, context) {
         // display results in page
-        var w = 10;
+        var w = 5;
         var h = 15;
         var total = w * h;
         var data = context.getImageData(0,0,400,300).data;
@@ -105,7 +105,7 @@ KeyboardView.prototype = {
 
         // times width by 4 because 4 points of data per pixel
         for (var x = 0; x < (400*4); x += (w*4)) { 
-          for (var y = 0; y < (300); y += (h)) {
+          for (var y = 150; y < (300); y += (h)) {
             var red = 0, green = 0, blue = 0;
         
             for (var i = 0; i < (w*4); i+=4) {
