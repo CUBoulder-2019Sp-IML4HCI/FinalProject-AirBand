@@ -114,56 +114,56 @@ oscServer.on("message", function (msg, rinfo) {
 // set up client to communicate to wekinator
 var oscClient = new osc.Client('127.0.0.1', OSC_SEND_PORT);
 console.log('sending OSC packets on *:'+OSC_SEND_PORT);
-// oscClient.send('/wekinator/control/deleteExamplesForOutput', 1);
-// oscClient.send('/wekinator/control/deleteExamplesForOutput', 2);
-// oscClient.send('/wekinator/control/deleteExamplesForOutput', 7);
-// oscClient.send('/wekinator/control/deleteExamplesForOutput', 8);
+oscClient.send('/wekinator/control/deleteExamplesForOutput', 1);
+oscClient.send('/wekinator/control/deleteExamplesForOutput', 2);
+oscClient.send('/wekinator/control/deleteExamplesForOutput', 7);
+oscClient.send('/wekinator/control/deleteExamplesForOutput', 8);
 
 
 
 // set up serial port to read micro:bit serial lines
-// var serialPort = new SerialPort(SERIAL_PORT, {
-//   baudRate: 115200,
-// });
+var serialPort = new SerialPort(SERIAL_PORT, {
+  baudRate: 115200,
+});
 
-// // set up the parser to readlines
-// var parser = serialPort.pipe(new Readline({ delimiter: '\n' }));
-// parser.on('data', function(line) {
-//   console.log(line);
-//   // All Drum start with #
-//   // #k is 3g
-//   // #l is left drum hit)
-//   // #r is right drum hit)
-//   var first_two = line.slice(0,2);
-//   var first_one = line.slice(0,1);
-//   if (first_two == "#k") { // kick drum
-//     setTimeout(() => model.updateKick(line.slice(2)), 0);
-//     setTimeout(sendData, 0);
-//   } else if (first_two == "#l") { // left drum hit
-//     setTimeout(() => model.updateLeftHand(line.slice(2)), 0);
-//     setTimeout(sendData, 0);
-//   } else if (first_two == "#r") { // right drum hit
-//     setTimeout(() => model.updateRightHand(line.slice(2)), 0);
-//     setTimeout(sendData, 0);
-//   }
+// set up the parser to readlines
+var parser = serialPort.pipe(new Readline({ delimiter: '\n' }));
+parser.on('data', function(line) {
+  console.log(line);
+  // All Drum start with #
+  // #k is 3g
+  // #l is left drum hit)
+  // #r is right drum hit)
+  var first_two = line.slice(0,2);
+  var first_one = line.slice(0,1);
+  if (first_two == "#k") { // kick drum
+    setTimeout(() => model.updateKick(line.slice(2)), 0);
+    setTimeout(sendData, 0);
+  } else if (first_two == "#l") { // left drum hit
+    setTimeout(() => model.updateLeftHand(line.slice(2)), 0);
+    setTimeout(sendData, 0);
+  } else if (first_two == "#r") { // right drum hit
+    setTimeout(() => model.updateRightHand(line.slice(2)), 0);
+    setTimeout(sendData, 0);
+  }
 
-//   // Flex sensor hands "R" and "L" (but we put micro:bits on the wrong one)
-//   else if (first_one == "L") {
-//     // console.log(line);
-//     var right = line.slice(2)
-//     var fingers = right.split('^').map(parseFloat);
-//     // console.log(fingers);
-//     model.updateRightHand(fingers);
-//     sendData();
-//   } else if (first_one == "R") {
-//     // console.log(line);
-//     var left = line.slice(2)
-//     var fingers = left.split('^').map(parseFloat);
-//     // console.log(fingers);
-//     model.updateLeftHand(fingers);
-//     sendData();
-//   }
-// });
+  // Flex sensor hands "R" and "L" (but we put micro:bits on the wrong one)
+  else if (first_one == "L") {
+    // console.log(line);
+    var right = line.slice(2)
+    var fingers = right.split('^').map(parseFloat);
+    // console.log(fingers);
+    model.updateRightHand(fingers);
+    sendData();
+  } else if (first_one == "R") {
+    // console.log(line);
+    var left = line.slice(2)
+    var fingers = left.split('^').map(parseFloat);
+    // console.log(fingers);
+    model.updateLeftHand(fingers);
+    sendData();
+  }
+});
 
 console.log('listening for serial packets on *:'+SERIAL_PORT);
 
