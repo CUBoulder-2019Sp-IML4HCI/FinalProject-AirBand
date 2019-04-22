@@ -54,12 +54,15 @@ io.on('connection', function(socket){
     if (msg["output"] != undefined){
       outputs = formulateTestOutputs(12);
       toTrain = msg["output"];
+      console.log(toTrain);
+      console.log(msg["payload"])
+
       for (var i = 0; i < toTrain.length; i++) {
         var index = toTrain[i] - 1;
         outputs[index]["value"] = msg["payload"][i];
       }
 
-      console.log(outputs);
+      console.log(outputs, "here outputs");
     }
 
     if (address === "/wekinator/control/startRecording" && toTrain != null) {

@@ -177,7 +177,7 @@ TrainingView.prototype = {
         this.stop_snapping();
         this.wekinatorMessage.notify({
             task: "training",
-            msg: {address:"/wekinator/control/stopRecording", payload: 1, output: this.steps[this.currentTab].output}
+            msg: {address:"/wekinator/control/stopRecording", payload: this.steps[this.currentTab].val, output: this.steps[this.currentTab].output}
         });
     },
 
@@ -212,7 +212,7 @@ TrainingView.prototype = {
         console.log(lowRes.length);
         view.wekinatorMessage.notify({
             task: "webcam",
-            msg: {data: lowRes}
+            msg: {data: lowRes, instrument: "drum"},
         });
       } );
     },

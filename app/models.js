@@ -10,20 +10,24 @@ Drum: class {
   }
 
   updateVideoInput(webcamInputs) {
+    console.log('vid update');
     for (var i = 0; i < 800; i++) {
       this.input[3+i] = webcamInputs[i];
     }
   }
 
   updateLeftHand(num) {
+    console.log('left update');
     this.input[0] = parseFloat(num);
   }
 
   updateRightHand(num) {
+    console.log('right update');
     this.input[1] = parseFloat(num);
   }
 
   updateKick(num) {
+    console.log('kick update');
     this.input[2] = parseFloat(num);
   }
 
