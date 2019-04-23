@@ -30,6 +30,10 @@ Once we obtained the Microsoft Kinect we ordered, I began attempting to connect 
 
 After updating my computer I am no longer able to get a live video stream from the Kinect. I had OSC messages briefly figured out prior to this happening but I need to get this fixed ASAP if we are to move forward with the Kinect.
 
+#### Week 13
+
+#### Week 14
+
 ## Mikhaila Friske
 #### Week 9
 Microbit for keyboard work. I started trying to use the acceleration from the micro:bit to try and get the point where the it would know when you are moving down. However, because it is acceleration and not velocity it was not working as well as I hoped (or really at all). I started to play around with the events of the micro:bit (like on shake) and messing around with putting a delay so it would "flip a switch" when it is shook to trigger a class in wekinator.
