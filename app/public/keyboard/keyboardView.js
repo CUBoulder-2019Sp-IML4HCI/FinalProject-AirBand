@@ -155,7 +155,7 @@ KeyboardView.prototype = {
         // console.log(lowRes.length);
         view.wekinatorMessage.notify({
             task: "webcam",
-            msg: {data: lowRes}
+            msg: {data: lowRes, instrument:"keyboard"}
         });
         view.model.updateVideo(lowRes);
       } );
