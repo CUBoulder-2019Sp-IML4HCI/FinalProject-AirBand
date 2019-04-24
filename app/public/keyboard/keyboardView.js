@@ -1,3 +1,11 @@
+function ifWithin(color, number) {
+  if (color > number-30 && color < number+30) {
+    return true
+  } else {
+    return false
+  }
+}
+
 var KeyboardView = function (model) {
     this.model = model;
     
@@ -80,7 +88,7 @@ KeyboardView.prototype = {
     },
 
     handleClicks: function(e) {
-        console.log(e.code);
+        // console.log(e.code);
         if (e.code === "Space") {
             e.preventDefault;
             view.startRunningButton();
@@ -102,10 +110,11 @@ KeyboardView.prototype = {
         var total = w * h;
         var data = context.getImageData(0,0,400,300).data;
         var lowRes = [];
+        // console.log("taking snapshot....")
 
         // times width by 4 because 4 points of data per pixel
-        for (var x = 0; x < (400*4); x += (w*4)) { 
-          for (var y = 150; y < (300); y += (h)) {
+        for (var y = 150; y < (300); y += (h)) {
+            for (var x = 0; x < (400*4); x += (w*4)) { 
             var red = 0, green = 0, blue = 0;
         
             for (var i = 0; i < (w*4); i+=4) {
@@ -116,9 +125,30 @@ KeyboardView.prototype = {
                 blue += data[index+2];
               }
             }
+
             // RGB = (R*65536)+(G*256)+B
-            var color = (red*65536)+(green*256)+blue;
+            blue = Math.round(blue/total);
+            green = Math.round(green/total);
+            red = Math.round(red/total);
+
+            if (70<green-blue && 190 > green-blue) {
+                red = 0;
+                blue = 0;
+            } else if (ifWithin(red, 160) && ifWithin(green, 60) && ifWithin(blue,120)) {
+                red = 0;
+                green = 0;
+            } else {
+                var avg = (red + green + blue) / 3
+                red = avg;
+                green = avg;
+                blue = avg;
+            }
+            var color = (red*65536)+(green*256)+(blue);
             lowRes.push(color);
+            // if (y >= 150 && y < 275 && x >= 600 && x < 1000) {
+            //     console.log(color);
+            // }
+
           }
         }
         // Make sure it is 800 inputs
@@ -127,6 +157,7 @@ KeyboardView.prototype = {
             task: "webcam",
             msg: {data: lowRes}
         });
+        view.model.updateVideo(lowRes);
       } );
     },
     
@@ -145,16 +176,16 @@ KeyboardView.prototype = {
     },
 
     playSound: function (left, right) {
-        notes = ['C3','C#3' 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3', 'G#3', 'A4', 'A#4', 'B4', 'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A5', 'A#5', 'B5', 'C5']
+        notes = ['C3','C#3', 'D3', 'D#3', 'E3', 'F3', 'F#3', 'G3', 'G#3', 'A4', 'A#4', 'B4', 'C4', 'C#4', 'D4', 'D#4', 'E4', 'F4', 'F#4', 'G4', 'G#4', 'A5', 'A#5', 'B5', 'C5']
         // stuff to update the view
-        console.log("show");
+        // console.log("show");
         // this.$currentEvent.innerHTML = drumClass
         if (left.hit === 1 && !this.lplaying) {
             this.lplaying = true;
             var index = left.position;
             for (var i = 0; i < 4; i++) {
                 if (left.fingers[i] === 1) {
-                    console.log(notes[index+i])
+                    // console.log(notes[index+i])
                     this.leftNotes[i].triggerAttack(notes[index+i]);
                 }
             }
@@ -165,7 +196,7 @@ KeyboardView.prototype = {
             var index = right.position;
             for (var i = 0; i < 4; i++) {
                 if (right.fingers[i] === 1) {
-                    console.log(notes[index+i])
+                    // console.log(notes[index+i])
                     this.rightNotes[i].triggerAttack(notes[index+i]);
                 }
             }
@@ -208,7 +239,7 @@ KeyboardView.prototype = {
     /* -------------------- Handlers From Event Dispatcher ----------------- */
 
     updateModel: function (sender, args) {
-        console.log(args);
+        // console.log(args);
         if (this.running) {
             this.playSound(args["left"], args["right"]);
         }

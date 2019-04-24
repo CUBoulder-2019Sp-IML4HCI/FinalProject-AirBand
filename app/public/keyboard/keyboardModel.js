@@ -8,6 +8,8 @@ var KeyboardModel = function () {
     this.leftHand = {position: 0, playing: false, hit: 2, fingers: [1,1,1,1]};
     this.rightHand = {position: 0, playing: false, hit: 2, fingers: [1,1,1,1]};
 
+    this.video = null;
+
  };
 
  KeyboardModel.prototype = {
@@ -59,6 +61,11 @@ var KeyboardModel = function () {
         } 
       
         return res; 
+    },
+
+    updateVideo: function(videoInputs) {
+        this.video = videoInputs;
+        // console.log(this.video);
     }
 
 
