@@ -220,9 +220,9 @@ TrainingView.prototype = {
             }
 
             // RGB = (R*65536)+(G*256)+B
-            blue = Math.round(blue/total);
-            green = Math.round(green/total);
-            red = Math.round(red/total);
+            blue = Math.floor(blue/total);
+            green = Math.floor(green/total);
+            red = Math.floor(red/total);
 
             if (70<green-blue && 190 > green-blue) {
                 red = 0;
@@ -231,7 +231,7 @@ TrainingView.prototype = {
                 red = 0;
                 green = 0;
             } else {
-                var avg = (red + green + blue) / 3
+                var avg = Math.round((red + green + blue) / 3)
                 red = avg;
                 green = avg;
                 blue = avg;
@@ -249,6 +249,7 @@ TrainingView.prototype = {
             task: "webcam",
             msg: {data: lowRes, instrument:"keyboard"}
         });
+        view.model.updateVideo(lowRes);
       } );
     },
     

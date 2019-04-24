@@ -138,16 +138,14 @@ KeyboardView.prototype = {
                 red = 0;
                 green = 0;
             } else {
-                var avg = (red + green + blue) / 3
+                var avg = Math.floor((red + green + blue) / 3)
+                // console.log(avg);
                 red = avg;
                 green = avg;
                 blue = avg;
             }
             var color = (red*65536)+(green*256)+(blue);
             lowRes.push(color);
-            // if (y >= 150 && y < 275 && x >= 600 && x < 1000) {
-            //     console.log(color);
-            // }
 
           }
         }
