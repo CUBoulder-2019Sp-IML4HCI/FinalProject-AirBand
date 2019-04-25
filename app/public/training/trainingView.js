@@ -1,3 +1,11 @@
+function ifWithin(color, number) {
+  if (color > number-30 && color < number+30) {
+    return true
+  } else {
+    return false
+  }
+}
+
 var TrainingView = function (model) {
     this.model = model;
     this.updateCurrentEvent = new Event(this);
@@ -126,6 +134,8 @@ TrainingView.prototype = {
         } else {
             this.recording = false;
             // stop recording
+
+            $('.rec-button').removeClass('recording');
             this.stopRecording();
             this.$recButton[0].innerHTML = "Record";
         }
@@ -133,9 +143,12 @@ TrainingView.prototype = {
 
 
     countdown: function() {
-        view.$countdown.innerHTML = view.count;
+        var rec = ["Go!", "Set", "...", "..", "."];
+
+        view.$countdown.innerHTML = rec[view.count-1];
         view.count--;
         view.$recButton[0].innerHTML = view.count + 1;
+        $('.rec-button').toggleClass('warning');
 
         if (view.count < 0) {
             // start recording
@@ -143,8 +156,8 @@ TrainingView.prototype = {
             clearInterval(view.counter);
             view.$countdown.innerHTML = "";
             view.$recButton[0].innerHTML = "Stop";
-
-
+            $('.rec-button').addClass('recording');
+            setTimeout(view.recButtonHandler, 5000);
         }
     },
 
@@ -174,10 +187,11 @@ TrainingView.prototype = {
     },
 
     stopRecording: function () {
+        console.log("here, stop")
         this.stop_snapping();
         this.wekinatorMessage.notify({
             task: "training",
-            msg: {address:"/wekinator/control/stopRecording", payload: 1, output: this.steps[this.currentTab].output}
+            msg: {address:"/wekinator/control/stopRecording", payload: [1,1], output: this.steps[this.currentTab].output}
         });
     },
 
@@ -185,15 +199,16 @@ TrainingView.prototype = {
       // take snapshot and get image data
       Webcam.snap( function(data_uri, canvas, context) {
         // display results in page
-        var w = 10;
+        var w = 5;
         var h = 15;
         var total = w * h;
         var data = context.getImageData(0,0,400,300).data;
         var lowRes = [];
+        // console.log("taking snapshot....")
 
         // times width by 4 because 4 points of data per pixel
-        for (var x = 0; x < (400*4); x += (w*4)) { 
-          for (var y = 0; y < (300); y += (h)) {
+        for (var y = 150; y < (300); y += (h)) {
+            for (var x = 0; x < (400*4); x += (w*4)) { 
             var red = 0, green = 0, blue = 0;
         
             for (var i = 0; i < (w*4); i+=4) {
@@ -204,16 +219,38 @@ TrainingView.prototype = {
                 blue += data[index+2];
               }
             }
+
             // RGB = (R*65536)+(G*256)+B
-            var color = (red*65536)+(green*256)+blue;
+            blue = Math.floor(blue/total);
+            green = Math.floor(green/total);
+            red = Math.floor(red/total);
+
+            if (70<green-blue && 190 > green-blue) {
+                red = 0;
+                blue = 0;
+            } else if (ifWithin(red, 160) && ifWithin(green, 60) && ifWithin(blue,120)) {
+                red = 0;
+                green = 0;
+            } else {
+                var avg = Math.round((red + green + blue) / 3)
+                red = avg;
+                green = avg;
+                blue = avg;
+            }
+            var color = (red*65536)+(green*256)+(blue);
             lowRes.push(color);
+            // if (y >= 150 && y < 275 && x >= 600 && x < 1000) {
+            //     console.log(color);
+            // }
+
           }
         }
-        console.log(lowRes.length);
+        // console.log(lowRes.length);
         view.wekinatorMessage.notify({
             task: "webcam",
-            msg: {data: lowRes}
+            msg: {data: lowRes, instrument:"keyboard"}
         });
+        view.model.updateVideo(lowRes);
       } );
     },
     

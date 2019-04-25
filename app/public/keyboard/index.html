@@ -10,7 +10,6 @@
     <script src="../libraries/p5.min.js" type="text/javascript"></script>
 
     <script src="../libraries/p5.dom.js" type="text/javascript"></script>
-    <script src="../libraries/p5.sound.min.js" type="text/javascript"></script>
     <script src="../libraries/foundation/js/vendor/foundation.min.js" type="text/javascript"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="../libraries/Tone.js"></script>
@@ -32,11 +31,9 @@
   <script src="keyboardModel.js" type="text/javascript"></script>
   <script src="keyboardView.js" type="text/javascript"></script>
   <script src="keyboardController.js" type="text/javascript"></script>
+  <script src="sketch.js" type="text/javascript"></script>
   <script>
     var touched = false;
-    function mousePressed() { if (!touched) {
-     getAudioContext().resume(); touched = true} 
-    }
     var model = new KeyboardModel(),
         view = new KeyboardView(model),
         controller = new KeyboardController(model, view);

@@ -3,6 +3,8 @@ var TrainingModel = function () {
     this.trainingClass = -1;
     this.updateCurrentEvent = new Event(this);
 
+    this.video = null;
+
  };
 
  TrainingModel.prototype = {
@@ -25,6 +27,11 @@ var TrainingModel = function () {
             this.updateCurrentEvent.notify({trainingClass: this.trainingClass}); 
         }
         
+    },
+
+    updateVideo: function(videoInputs) {
+        this.video = videoInputs;
+        // console.log(this.video);
     },
 
     mostFreqClass: function() {

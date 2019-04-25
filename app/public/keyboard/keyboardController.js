@@ -16,7 +16,7 @@ KeyboardController.prototype = {
         this.socket.on('osc', function(msg){
           
           // Do stuff
-          console.log("messaged received");
+          // console.log("messaged received");
           // needs to be controller because (a) I am hacking 
           // and (b) it is the name of the controller
           controller.updateCurrent(msg); 
@@ -43,7 +43,7 @@ KeyboardController.prototype = {
     },
     
     updateCurrent: function (args) {
-        console.log(args);
+        // console.log(args);
         this.model.updateModel(args);
     },
 
