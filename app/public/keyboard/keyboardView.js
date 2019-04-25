@@ -131,10 +131,14 @@ KeyboardView.prototype = {
             green = Math.round(green/total);
             red = Math.round(red/total);
 
+            if ( x === 0 && y === 150) {
+                console.log(red, green, blue, red-green, red-blue);
+            }
+
             if (70<green-blue && 190 > green-blue) {
                 red = 0;
                 blue = 0;
-            } else if (ifWithin(red, 160) && ifWithin(green, 60) && ifWithin(blue,120)) {
+            } else if (60<red-green && 120>red-green) {
                 red = 0;
                 green = 0;
             } else {

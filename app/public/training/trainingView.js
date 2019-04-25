@@ -12,7 +12,7 @@ var TrainingView = function (model) {
     this.wekinatorMessage = new Event(this);
 
     // steps for training keyboard. To update when multiple instruments
-    this.steps = [{output: [1,2], val: [1,0]}, {output: [1,2], val: [1,.5]}, {output: [1,2], val: [1,1]}, {output: [7,8], val: [1,0]}, {output: [7,8], val: [1,.5]}, {output: [7,8], val: [1,1]}, {output: [1,7], val: [2,2]}]
+    this.steps = [{output: [1,2], val: [1,0]}, {output: [1,2], val: [1,10]}, {output: [1,2], val: [1,20]}, {output: [7,8], val: [1,0]}, {output: [7,8], val: [1,10]}, {output: [7,8], val: [1,20]}, {output: [1,7], val: [2,2]}]
 
     this.timer = null;
     this.counter = null;
