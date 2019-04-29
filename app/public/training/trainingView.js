@@ -8,8 +8,10 @@ var TrainingView = function (model) {
 
     this.timer = null;
     this.counter = null;
+    this.prep = null;
     this.currentTab = 0;
     this.count = -1;
+    this.prepCount = -1;
     this.recording = false;
 
     this.init();
@@ -119,8 +121,10 @@ TrainingView.prototype = {
         if (!this.recording) {
             this.recording = true;
             this.count = 5;
+            this.prepCount = 0;
 
-            this.counter = setInterval(this.countdown, 700);
+            this.prep = setInterval(this.recPrep, 1000);
+            this.counter = setInterval(this.countdown, 1000);
 
             this.$recButton[0].innerHTML = "Stop";
         } else {
@@ -131,6 +135,14 @@ TrainingView.prototype = {
         }
     },
 
+    recPrep: function(){
+        text = ["Ready","Set","Go"];
+        view.$countdown.innerHTML = text[view.prepCount];
+        view.prepCount++;
+        if (view.prepCount > 2){
+            return;
+        }
+    },
 
     countdown: function() {
         view.$countdown.innerHTML = view.count;
