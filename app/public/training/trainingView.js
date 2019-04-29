@@ -1,10 +1,18 @@
+function ifWithin(color, number) {
+  if (color > number-30 && color < number+30) {
+    return true
+  } else {
+    return false
+  }
+}
+
 var TrainingView = function (model) {
     this.model = model;
     this.updateCurrentEvent = new Event(this);
     this.wekinatorMessage = new Event(this);
 
     // steps for training keyboard. To update when multiple instruments
-    this.steps = [{output: [1,2], val: [1,0]}, {output: [1,2], val: [1,.5]}, {output: [1,2], val: [1,1]}, {output: [7,8], val: [1,0]}, {output: [7,8], val: [1,.5]}, {output: [7,8], val: [1,1]}, {output: [1,7], val: [2,2]}]
+    this.steps = [{output: [1,2], val: [1,0]}, {output: [1,2], val: [1,10]}, {output: [1,2], val: [1,20]}, {output: [7,8], val: [1,0]}, {output: [7,8], val: [1,10]}, {output: [7,8], val: [1,20]}, {output: [1,7], val: [2,2]}]
 
     this.timer = null;
     this.counter = null;
@@ -130,6 +138,8 @@ TrainingView.prototype = {
         } else {
             this.recording = false;
             // stop recording
+
+            $('.rec-button').removeClass('recording');
             this.stopRecording();
             this.$recButton[0].innerHTML = "Record";
         }
@@ -145,14 +155,19 @@ TrainingView.prototype = {
     },
 
     countdown: function() {
-        view.$countdown.innerHTML = view.count;
+        var rec = ["Go!", "Set", "...", "..", "."];
+
+        view.$countdown.innerHTML = rec[view.count-1];
         view.count--;
+        $('.rec-button').toggleClass('warning');
 
         if (view.count < 0) {
             // start recording
             view.startRecording();
             clearInterval(view.counter);
             view.$countdown.innerHTML = "";
+            $('.rec-button').addClass('recording');
+            setTimeout(view.recButtonHandler, 5000);
 
         }
     },
@@ -183,10 +198,11 @@ TrainingView.prototype = {
     },
 
     stopRecording: function () {
+        console.log("here, stop")
         this.stop_snapping();
         this.wekinatorMessage.notify({
             task: "training",
-            msg: {address:"/wekinator/control/stopRecording", payload: 1, output: this.steps[this.currentTab].output}
+            msg: {address:"/wekinator/control/stopRecording", payload: [1,1], output: this.steps[this.currentTab].output}
         });
     },
 
@@ -199,10 +215,11 @@ TrainingView.prototype = {
         var total = w * h;
         var data = context.getImageData(0,0,400,300).data;
         var lowRes = [];
+        // console.log("taking snapshot....")
 
         // times width by 4 because 4 points of data per pixel
-        for (var x = 0; x < (400*4); x += (w*4)) { 
-          for (var y = 150; y < (300); y += (h)) {
+        for (var y = 150; y < (300); y += (h)) {
+            for (var x = 0; x < (400*4); x += (w*4)) { 
             var red = 0, green = 0, blue = 0;
         
             for (var i = 0; i < (w*4); i+=4) {
@@ -213,16 +230,41 @@ TrainingView.prototype = {
                 blue += data[index+2];
               }
             }
+
             // RGB = (R*65536)+(G*256)+B
-            var color = (red*65536)+(green*256)+blue;
+            blue = Math.round(blue/total);
+            green = Math.round(green/total);
+            red = Math.round(red/total);
+
+            if ( x === 0 && y === 150) {
+                console.log(red, green, blue, red-green, red-blue);
+            }
+
+            if (70<green-blue && 190 > green-blue) {
+                red = 0;
+                blue = 0;
+            } else if (60<red-green && 120>red-green) {
+                red = 0;
+                green = 0;
+            } else {
+                var avg = Math.floor((red + green + blue) / 3)
+                // console.log(avg);
+                red = avg;
+                green = avg;
+                blue = avg;
+            }
+            var color = (red*65536)+(green*256)+(blue);
             lowRes.push(color);
+
           }
         }
-        console.log(lowRes.length);
+        // Make sure it is 800 inputs
+        // console.log(lowRes.length);
         view.wekinatorMessage.notify({
             task: "webcam",
-            msg: {data: lowRes}
+            msg: {data: lowRes, instrument:"keyboard"}
         });
+        view.model.updateVideo(lowRes);
       } );
     },
     
