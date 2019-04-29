@@ -206,10 +206,17 @@ KeyboardView.prototype = {
 
         if (left.hit === 2) {
             this.lplaying = false;
+            this.rplaying = false;
+            for (var i = 0; i < 4; i++) {
+                this.leftNotes[i].triggerRelease();
+            }
         }
 
         if (right.hit === 2) {
             this.rplaying = false;
+            for (var i = 0; i < 4; i++) {
+                this.rightNotes[i].triggerRelease();
+            }
         }
     },
 

@@ -220,30 +220,33 @@ TrainingView.prototype = {
             }
 
             // RGB = (R*65536)+(G*256)+B
-            blue = Math.floor(blue/total);
-            green = Math.floor(green/total);
-            red = Math.floor(red/total);
+            blue = Math.round(blue/total);
+            green = Math.round(green/total);
+            red = Math.round(red/total);
+
+            if ( x === 0 && y === 150) {
+                console.log(red, green, blue, red-green, red-blue);
+            }
 
             if (70<green-blue && 190 > green-blue) {
                 red = 0;
                 blue = 0;
-            } else if (ifWithin(red, 160) && ifWithin(green, 60) && ifWithin(blue,120)) {
+            } else if (60<red-green && 120>red-green) {
                 red = 0;
                 green = 0;
             } else {
-                var avg = Math.round((red + green + blue) / 3)
+                var avg = Math.floor((red + green + blue) / 3)
+                // console.log(avg);
                 red = avg;
                 green = avg;
                 blue = avg;
             }
             var color = (red*65536)+(green*256)+(blue);
             lowRes.push(color);
-            // if (y >= 150 && y < 275 && x >= 600 && x < 1000) {
-            //     console.log(color);
-            // }
 
           }
         }
+        // Make sure it is 800 inputs
         // console.log(lowRes.length);
         view.wekinatorMessage.notify({
             task: "webcam",
