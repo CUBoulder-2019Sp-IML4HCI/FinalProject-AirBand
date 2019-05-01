@@ -14,7 +14,7 @@ For more details on Windows download, you may look to [this walkthrough](https:/
 ## Running the Program
 When you run the program, you will need to run 3 commands at the same time (the application, myo to osc, and Micro:bit glove to osc).
 
-Once the project is running you can navigate to [localhost:4243](http://localhost:4243) to explore the OSC log and to explore an instrument plase use `/instrument`, for example [localhost:4243/drum/](http://localhost:4243/drum/).
+Once the project is running you can navigate to [localhost:4243](http://localhost:4243) to explore the OSC log. To start playing the keyboard please first travel to the training page at [localhost:4243/training/](http://localhost:4243/training/).
 
 The first time run:
 ```
