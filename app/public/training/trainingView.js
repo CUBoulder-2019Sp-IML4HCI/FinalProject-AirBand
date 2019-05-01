@@ -145,14 +145,14 @@ TrainingView.prototype = {
         }
     },
 
-    recPrep: function(){
-        text = ["Ready","Set","Go"];
-        view.$countdown.innerHTML = text[view.prepCount];
-        view.prepCount++;
-        if (view.prepCount > 2){
-            return;
-        }
-    },
+    // recPrep: function(){
+    //     text = ["Ready","Set","Go"];
+    //     view.$countdown.innerHTML = text[view.prepCount];
+    //     view.prepCount++;
+    //     if (view.prepCount > 2){
+    //         return;
+    //     }
+    // },
 
     countdown: function() {
         var rec = ["Go!", "Set", "...", "..", "."];
