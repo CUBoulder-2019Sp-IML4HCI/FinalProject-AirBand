@@ -103,21 +103,19 @@ TrainingView.prototype = {
     // },
 
     handleClicks: function(e) {
-        console.log(e.code);
+        e.preventDefault;
         if (e.code === "ArrowLeft") {
-            e.preventDefault;
-            view.prevButton();
+            // console.log('here');
+            view.prevButtonHandler();
         } else if (e.code === "ArrowRight") {
-            e.preventDefault;
-            view.nextButton();
+            view.nextButtonHandler();
         } else if (e.code === "Space") {
-            e.preventDefault;
-            view.recButton();
+            view.recButtonHandler();
         }
     },
 
     nextButton: function () {
-        console.log('here');
+        // console.log('here');
         this.nextPrev(1);
     },
 
@@ -182,7 +180,7 @@ TrainingView.prototype = {
     },
 
     train: function () {
-        this.start_snapping();
+        // this.stopRecording();
         this.wekinatorMessage.notify({
             task: "training",
             msg: {address:"/wekinator/control/train", payload: 1}
@@ -313,6 +311,7 @@ TrainingView.prototype = {
       // if you have reached the end of the form... :
       if (this.currentTab >= this.$tabs.length) {
         //...the form gets submitted:
+        console.log('here');
         this.train();
         window.location.href = "http://localhost:4243/keyboard";
         return false;
