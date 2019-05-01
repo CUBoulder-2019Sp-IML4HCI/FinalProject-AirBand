@@ -1,17 +1,19 @@
-# Air Band
-To run the application you will need:
+# FinalProject-AirBand
+This project provides all of the software components for playing an air keyboard, an instrument that allows the player to generate piano sounds by moving his or her hands and fingers. 
 
-1. The receiver micro:bit to be plugged into the computer.
-2. The gloves with the flex sensors sending to the receiver.
-3. The node web application running in a terminal
-4. A Wekinator project opened with the keyboard 808 inputs project.
+## Requirements
+*Node
+*Wekinator
+*Web Camera
+*3 Micro:bits
+*2 Micro:bit Breakout Boards
+*2 AAA Battery Packs
+*8 Flex Sensors
+*8 Knitted Finger Sweaters
+*2 Gloves
 
-## Web Application
-When running the application, you may need to update the serial port in `index.js` that the application listens to from `/dev/cu.usbmodem1422` to whatever you have the micro:bit plugged into.
-
-### Requirements
-To run this web application you will need `node`.
-
+### Node
+To run the web application you will need `node`
 You may download node from the [nodejs website](https://nodejs.org/en/download/). 
 
 If you are on Mac, you may use `homebrew`:
@@ -21,11 +23,19 @@ brew install node
 
 For more details on Windows download, you may look to [this walkthrough](https://www.guru99.com/download-install-node-js.html).
 
-## Running the Program
-When you run the program, you will need to run 3 commands at the same time (the application, myo to osc, and Micro:bit glove to osc).
+### Wekinator
+To install Wekinator, download if from the [Wekinator website](http://www.wekinator.org/downloads/) and to use the keyboard project, open the Keyboard_808Inputs.wekproj file.
 
-Once the project is running you can navigate to [localhost:4243](http://localhost:4243) to explore the OSC log. To start playing the keyboard please first travel to the training page at [localhost:4243/training/](http://localhost:4243/training/).
+### Flex Sensor Gloves
+The gloves were constructed each with four flex sensors in voltage divider circuits, as shown on the [Sparkfun setup guide](https://learn.sparkfun.com/tutorials/flex-sensor-hookup-guide). After connecting the Micro:bits to their breakout boards, the flex sensors are connected to the analog pins on the Micro:bit, as shown in the [Micro:bit pinout diagram](https://microbit-micropython.readthedocs.io/en/latest/pin.html). The finger sweaters should be wrapped around each finger, holding the flex sensors in place.
 
+### Micro:bit
+To ensure that you are using the correct Micro:bit code, install the following hex files to their corresponding devices:
+microbit-Flex-Sensor-Read.hex -> Computer Micro:bit
+microbit-Left-Flex-Sensor-Write.hex -> Left Glove Micro:bit
+microbit-Right-Flex-Sensor-Write.hex -> Right Glove Micro:bit
+
+## Running the Program.
 The first time run:
 ```
 npm install
@@ -35,8 +45,11 @@ To run web application use:
 ```
 node .
 ```
-### Modification Information
-This web application contains modified code of a MVC using javascript from an [awwwards tutorial](https://www.awwwards.com/build-a-simple-javascript-app-the-mvc-way.html) along with code from [Github Repository OSCtoSocketIO](https://github.com/rustynymph/OSCtoSocketIO).
 
-## Instruments
-This folder contains the micro:bit code for the keyboard as well as a wekinator project. Documentation on how the gloves are implemented can be found in the [final_writeup.md](https://github.com/CUBoulder-2019Sp-IML4HCI/FinalProject-AirBand/blob/keyboard_expo/final_writeup.md).
+Once the project is running, open the Wekinator project and navigate to [localhost:4243/training](http://localhost:4243/training) in your browser to begin training your hand motions for the keyboard. After following the training instructions in the web app, it will direct you to the keyboard at [localhost:4243/keyboard/](http://localhost:4243/keyboard/), where you can start playing.
+
+## Using the gloves
+After putting on the gloves, make sure that all of the finger sweaters are embracing the flex sensors and that the Micro:bits are all plugged in. Connect the glove Micro:bits to the battery packs and the other to the computer.
+
+## Modification Information
+This web application contains modified code of a MVC using javascript from an [awwwards tutorial](https://www.awwwards.com/build-a-simple-javascript-app-the-mvc-way.html) along with code from [Github Repository OSCtoSocketIO](https://github.com/rustynymph/OSCtoSocketIO).
