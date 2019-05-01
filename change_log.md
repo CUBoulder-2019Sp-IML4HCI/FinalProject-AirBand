@@ -20,7 +20,6 @@ I constructed another flex sensor glove so we can begin testing an air keyboard.
 I took another group's suggestion of using a 3 Microbit set up with 2 Microbits acting as transmitters and the third Microbit acting as a receiver connected to the computer via USB. While this is a viable configuration, using the radio signal strength to determine distance between the 2 transmitters is simply too noisy and we will most likely end up having to use a Kinect. I also started to modify the jean jacket we purchased on Saturday and am figuring out the best parts of it to incorporate sensors. This will likely be used for the air drummer and could potentially use a camera or an ultrasonic sensor attached to the chest to keep track of the drummer's arm position and movement.
 
 #### Week 11
-
 Once we obtained the Microsoft Kinect we ordered, I began attempting to connect to it and operate it through Mac OSX. Although we were advised to use this feature extractor on Windows, every member of our group has a Mac and also another team in our class already had success with Kinect + OSX leading me to believe it is feasible. After a lot of trial and error and the installation of various drivers and MacPorts, I was successful in getting live video from the Kinect on my desktop. This was done with a command 'freenect-glview' in the terminal once I had cloned and installed the repo from an open-sourced Kinect project called 'Open Kinect'. The Kinect can do IR video as well as depth view. I now need to figure out how to generate/read OSC messages from the Kinect video stream and also how to get it to recognize human figures so we can start integrating it into the Air Band. 
 
 #### Week 12
@@ -46,6 +45,12 @@ Connected the application to the kick drum wekinator project. Worked on debriefi
 Got the application talking with wekinator and also got serial port to read into the node server. Worked on having a micro:bit being read and sent to wekinator from app and then having app update based on output data. You may now play the A and B buttons as well as the 3G event on a micro:bit that is plugged in.
 
 Next steps: Look into setting up the way the user will train the models and working on making one instrument viable for showcase. 
+
+#### Week 14
+Getting the application in a working state with the webcam. Work on manipulating the webcam data to have it be able to pick out the colors of the finger sweaters. I also crocheted a bunch of finger sweaters for the gloves.
+
+#### Week 15
+Work through the write up and put some final touches on the application to make it work a little more reliably (and fixing some of the bugs with the space, left, right controls)
 
 ## Bridget Murphy
 #### Week 10
