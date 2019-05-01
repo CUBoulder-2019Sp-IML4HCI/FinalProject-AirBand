@@ -64,6 +64,9 @@ I also put together the demo video for week 11
 #### Week 13
 I was able to solve my microbit problems with some help from Gabe, who did something similar for his gloves. We were abe to get the microbits to only send signals when they sense the 3g motion which should help with the speed of the overall app. The next step is to connect what I have with the app and javascript file and then see if I can get some sound going. I also put the video together for week 13.
 
+#### Week 14
+This week I shifted focus to help with setup for the expo and to work on documentation for the final report. I helped edit some of the proposal to make it final report ready and then proofread after Gabe's edits. The whole group presented at the ATLAS Expo, which went well. We had lots of people visit and try out the project. I created a graphic to show how all of our technologies connect to one another. I demonstrated the gloves for our demo video and did some voice over for the final demo.
+
 ## Team
 #### Week 9
 We tested the Microbit magnetometer to determine whether it is a feasible option for measuring distance between hands and found that it is not strong enough to measure the distance we need. We also took a trip to Goodwill to pick up some rock-n-roll atire, including gloves and a denim jacket, which we will cut into a vest to fit various body types.
