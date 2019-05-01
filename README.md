@@ -7,7 +7,7 @@ To run the application you will need:
 4. A Wekinator project opened with the keyboard 808 inputs project.
 
 ## Web Application
-When running the application, you may need to update the serial port in `server.js` that the application listens to from `/dev/cu.modem1422` to whatever you have the micro:bit plugged into.
+When running the application, you may need to update the serial port in `index.js` that the application listens to from `/dev/cu.usbmodem1422` to whatever you have the micro:bit plugged into.
 
 ### Requirements
 To run this web application you will need `node`.
