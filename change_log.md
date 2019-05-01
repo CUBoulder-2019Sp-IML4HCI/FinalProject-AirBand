@@ -56,6 +56,14 @@ Work through the write up and put some final touches on the application to make 
 #### Week 10
 Last week I created some storyboards and scenarios to go along with our final proposal we turned in last week. I think it paints a good picture of what we want the experience to be like.  This week I messed around with Annie's signal strength library for the microbit. After talking with another group, we figured out we should change the signal strength, which defaults to a pretty high setting. I also emailed Annie and got an example for the library, which should help us moving forward. Next I would like to come up with a design to incorporate the microbits and gloves we purchased this weekend.
 
+#### Week 11 and 12
+I worked on creating a drum kit with three microbits, one for each stick as well as the kick drum we already had. Originally I tried to create a regression model for all three of the microbits so we could use it to control the volume at which each drum sound plays, however since we didn't have the specifics of the sounds figured out, I decided to just create a classification project which indicates when a drum has been hit. I wasn't able to accomplish this just yet because of some issues with the three microbits communicating at the same time. I did not have the correct code on the microbit and was trying to send messages from all three without prefixes which made them hard to interpret.
+
+I also put together the demo video for week 11
+
+#### Week 13
+I was able to solve my microbit problems with some help from Gabe, who did something similar for his gloves. We were abe to get the microbits to only send signals when they sense the 3g motion which should help with the speed of the overall app. The next step is to connect what I have with the app and javascript file and then see if I can get some sound going. I also put the video together for week 13.
+
 ## Team
 #### Week 9
 We tested the Microbit magnetometer to determine whether it is a feasible option for measuring distance between hands and found that it is not strong enough to measure the distance we need. We also took a trip to Goodwill to pick up some rock-n-roll atire, including gloves and a denim jacket, which we will cut into a vest to fit various body types.
