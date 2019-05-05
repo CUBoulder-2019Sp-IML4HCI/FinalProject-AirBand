@@ -2,15 +2,15 @@
 This project provides all of the software components for playing an air keyboard, an instrument that allows the player to generate piano sounds by moving his or her hands and fingers. 
 
 ## Requirements
-*Node
-*Wekinator
-*Web Camera
-*3 Micro:bits
-*2 Micro:bit Breakout Boards
-*2 AAA Battery Packs
-*8 Flex Sensors
-*8 Knitted Finger Sweaters
-*2 Gloves
+*Node<br>
+*Wekinator<br>
+*Web Camera<br>
+*3 Micro:bits<br>
+*2 Micro:bit Breakout Boards<br>
+*2 AAA Battery Packs<br>
+*8 Flex Sensors<br>
+*8 Knitted Finger Sweaters<br>
+*2 Gloves<br>
 
 ### Node
 To run the web application you will need `node`
