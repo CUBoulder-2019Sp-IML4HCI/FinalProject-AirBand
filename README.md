@@ -55,5 +55,5 @@ After putting on the gloves, make sure that all of the finger sweaters are embra
 This web application contains modified code of a MVC using javascript from an [awwwards tutorial](https://www.awwwards.com/build-a-simple-javascript-app-the-mvc-way.html) along with code from [Github Repository OSCtoSocketIO](https://github.com/rustynymph/OSCtoSocketIO).
 
 ## YouTube
-Demo Video: https://www.youtube.com/watch?v=bcfCXegsz2k
+Demo Video: https://www.youtube.com/watch?v=8AhQiFyuwNc&feature=youtu.be
 
